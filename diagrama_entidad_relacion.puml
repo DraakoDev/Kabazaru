@@ -1,0 +1,50 @@
+@startchen Consesionario de Autos
+
+entity VEHICULO {
+  NBastidor <<key>>
+  Modelo
+  Precio
+  Descuento
+  Color
+  Marca
+}
+
+entity MARCA {
+  ID_Marca
+  Nombre 
+}
+
+entity CONSESIONARIO_MARCA {
+  ID_Marca
+  ID_Consesionario
+}
+
+relationship TIENE{
+}
+
+entity EQUIPAMIENTO {
+
+}
+
+entity CONSESIONARIO {
+  Marca
+  Nombre
+
+}
+
+entity SERVICIO_OFICIAL {
+  Nombre
+  Direccion
+  NIF
+}
+
+entity VENDEDORES {
+  NIF
+  Nombre
+  Direccion
+}
+
+
+CONSESIONARIO_MARCA -(N,1)- CONSESIONARIO 
+CONSESIONARIO_MARCA -(1,N)- MARCA 
+@endchen
