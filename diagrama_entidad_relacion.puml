@@ -1,21 +1,17 @@
 @startchen Consesionario de Autos
 
+left to right direction
+
 entity Vehiculo {
-  numeroBastidor
-  Marca
+  numeroBastidor <<key>>
   Modelo
   Precio
-  Descuento
-}
-
-entity Descuento {
-  Vehiculo
-  Descuento
 }
 
 entity Descuento { 
-  Descuento
-
+  Id
+  Porcentaje
+  Descripcion
 }
 
 entity Marca {
@@ -34,4 +30,36 @@ entity Equipaje {
   Precio
 }
 
+entity DatoTecnico {
+  Dato
+  Valor
+}
+
+entity ServicioOficial {
+  NIF
+  Nombre
+  Domicilio
+}
+
+entity Vendedor {
+  Cedula
+  Nombre
+  Consesionario
+}
+
+entity Consesionario {
+  Nombre
+  Direccion
+}
+
+entity DescuentoVehiculo {
+  Vehiculo <<derived>>
+  Descuento
+}
+
+Vehiculo -(1,N)- DescuentoVehiculo
+Descuento -(1,N)- DescuentoVehiculo
+Vehiculo -(1,1)- Modelo
+Marca -(1,1)- Modelo
+Modelo -(N,1)- Equipaje
 @endchen
