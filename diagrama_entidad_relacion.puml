@@ -1,9 +1,8 @@
-@startchen Consesionario de Autos
+@startuml
 
-left to right direction
 
 entity Vehiculo {
-  numeroBastidor <<key>>
+  numeroBastidor <<PK>>
   Modelo
   Precio
 }
@@ -15,51 +14,101 @@ entity Descuento {
 }
 
 entity Marca {
-  Nombre <<key>>
+  Nombre <<PK>>
 }
 
 entity Modelo {
-  Nombre <<key>>
+  Nombre <<PK>>
   Marca
 }
 
 entity Equipaje {
-  Modelo
+  Modelo 
   Accesorio
   Extra
   Precio
 }
 
-entity DatoTecnico {
-  Dato
-  Valor
+entity StockConsesionario {
+  Modelo 
+  Cantidad
+  Consesionario 
 }
 
-entity ServicioOficial {
-  NIF
-  Nombre
-  Domicilio
+entity StockServicioOficial {
+  Modelo
+  Cantidad
+  ServicioOficial
 }
 
 entity Vendedor {
   Cedula
   Nombre
-  Consesionario
+  Domicilio
+  Correo
+  Empresa
 }
 
-entity Consesionario {
-  Nombre
-  Direccion
+entity Venta {
+  Vendedor
+  DetalleVenta
+}
+
+entity DetalleVenta {
+  Vehiculo 
+  Precio
+  MetodoPago
+  FechaEntrega
+  Matricula
+  Encargo
 }
 
 entity DescuentoVehiculo {
-  Vehiculo <<derived>>
-  Descuento
+  Vehiculo 
+  Descuento 
 }
 
-Vehiculo -(1,N)- DescuentoVehiculo
-Descuento -(1,N)- DescuentoVehiculo
-Vehiculo -(1,1)- Modelo
-Marca -(1,1)- Modelo
-Modelo -(N,1)- Equipaje
-@endchen
+entity FichaTecnica {
+  Modelo 
+  Cilindrada
+  Potencia
+  Motor
+  Combustible
+  Carroceria
+  Color
+}
+
+entity Empresa {
+  NIF
+  Nombre
+  Direccion
+  Tipo 
+}
+
+entity Consesionario {
+  Empresa <<FK>>
+}
+
+entity Servicio {
+  Empresa <<FK>>
+}
+
+hide methods
+
+Vendedor -- Venta : (1,N)
+Venta -- DetalleVenta : (1,N)
+Consesionario -- Marca : (1,N)
+Servicio -- Marca : (1,N)
+Empresa -- Vendedor : (1,N)
+Empresa -- Consesionario : (1,N)
+Empresa -- Servicio : (1,N)
+Vehiculo -- DescuentoVehiculo : (1,N)
+Descuento -- DescuentoVehiculo : (1,N)
+Modelo -- Vehiculo : (1,N)
+Marca -- Modelo : (1,N)
+Modelo -- Equipaje : (1,N)
+Modelo -- FichaTecnica : (1,1)
+Modelo -- StockConsesionario : (1,N)
+Modelo -- StockServicioOficial : (1,N)
+
+@enduml
