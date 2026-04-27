@@ -130,4 +130,5 @@ DescuentoAplicado -- Factura: (1,N)
 DescuentoAplicado -- Descuento: (1,N)
 DescuentoAutomovil -- Automovil: (1,N)
 DescuentoAutomovil -- Descuento: (1,N)
+
 @enduml
