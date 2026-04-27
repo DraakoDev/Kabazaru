@@ -1,16 +1,23 @@
-@startuml
+@startuml DiagramaEntidadRelacion
 
+entity Stock{
+  Automovil <<PK, FK>>
+  Empresa <<PK, FK>>
+}
 
-entity Vehiculo {
+entity Automovil {
   numeroBastidor <<PK>>
-  Modelo
+  Modelo <<FK>>
   Precio
+  Estado
 }
 
 entity Descuento { 
-  Id
+  Id <<PK>>
   Porcentaje
   Descripcion
+  FechaFin
+  Estado
 }
 
 entity Marca {
@@ -18,58 +25,60 @@ entity Marca {
 }
 
 entity Modelo {
-  Nombre <<PK>>
-  Marca
+  Id <<PK>>
+  Marca <<FK>> 
+  Nombre <<UNIQUE>>
 }
 
 entity Equipaje {
-  Modelo 
+  Id <<PK>>
+  Modelo <<FK>>
   Accesorio
   Extra
   Precio
 }
 
-entity StockConsesionario {
-  Modelo 
-  Cantidad
-  Consesionario 
-}
-
-entity StockServicioOficial {
-  Modelo
-  Cantidad
-  ServicioOficial
-}
-
 entity Vendedor {
-  Cedula
+  Cedula <<PK>>
+  Empresa <<FK>>
   Nombre
   Domicilio
   Correo
-  Empresa
 }
 
 entity Venta {
-  Vendedor
-  DetalleVenta
-}
-
-entity DetalleVenta {
-  Vehiculo 
-  Precio
-  MetodoPago
+  Id <<PK>>
+  Vendedor <<FK>>
+  Automovil <<FK, UNIQUE>>
   FechaEntrega
+  FechaVenta
   Matricula
   Encargo
 }
 
-entity DescuentoVehiculo {
-  Vehiculo 
-  Descuento 
+entity Factura {
+  Id <<PK>>
+  Venta <<FK>>
+  PrecioAutomovil
+  Total
+  FechaEmision
+  MetodoPago
+}
+
+entity ExtrasAplicados {
+  Factura <<PK, FK>>
+  Equipaje <<PK, FK>>
+  Precio
+}
+
+entity DescuentoAplicado {
+  Factura <<PK, FK>>
+  Descuento <<PK, FK>>
+  Porcentaje
 }
 
 entity FichaTecnica {
-  Modelo 
+  Modelo <<PK FK>>
   Cilindrada
   Potencia
   Motor
@@ -79,36 +88,46 @@ entity FichaTecnica {
 }
 
 entity Empresa {
-  NIF
+  NIF <<PK>>
   Nombre
   Direccion
-  Tipo 
 }
 
 entity Consesionario {
-  Empresa <<FK>>
+  Empresa <<PK, FK>>
+  Marca <<PK, FK>>
 }
 
 entity Servicio {
-  Empresa <<FK>>
+  Empresa <<PK, FK>>
+  Marca <<PK, FK>>
+}
+
+entity DescuentoAutomovil {
+  Automovil <<PK, FK>>
+  Descuento <<PK, FK>>
 }
 
 hide methods
 
-Vendedor -- Venta : (1,N)
-Venta -- DetalleVenta : (1,N)
-Consesionario -- Marca : (1,N)
-Servicio -- Marca : (1,N)
-Empresa -- Vendedor : (1,N)
-Empresa -- Consesionario : (1,N)
-Empresa -- Servicio : (1,N)
-Vehiculo -- DescuentoVehiculo : (1,N)
-Descuento -- DescuentoVehiculo : (1,N)
-Modelo -- Vehiculo : (1,N)
-Marca -- Modelo : (1,N)
-Modelo -- Equipaje : (1,N)
-Modelo -- FichaTecnica : (1,1)
-Modelo -- StockConsesionario : (1,N)
-Modelo -- StockServicioOficial : (1,N)
-
+Empresa -- Stock: (1,N)
+Empresa -- Vendedor: (1,N)
+Empresa -- Consesionario: (1,N)
+Empresa -- Servicio: (1,N)
+Automovil -up- Stock: (1,N)
+Automovil -- Venta: (1,1)
+Automovil -- Modelo: (N,1)
+Modelo -- Equipaje: (1,N)
+Modelo -- FichaTecnica: (1,1)
+Vendedor -- Venta: (1,N)
+Consesionario -- Marca: (1,N)
+Servicio -- Marca: (1,N)
+Marca -- Modelo: (1,N)
+Factura -- Venta: (1,1)
+Factura -- ExtrasAplicados: (1,N)
+Equipaje -- ExtrasAplicados: (1,N)
+DescuentoAplicado -- Factura: (1,N)
+DescuentoAplicado -- Descuento: (1,N)
+DescuentoAutomovil -- Automovil: (1,N)
+DescuentoAutomovil -- Descuento: (1,N)
 @enduml
