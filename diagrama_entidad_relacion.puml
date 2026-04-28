@@ -1,8 +1,60 @@
 @startuml DiagramaEntidadRelacion
 
+skinparam linetype ortho
+
+together {
+  entity Empresa
+  entity TipoEmpresa
+}
+
+together {
+  entity Persona
+  entity Usuario
+  entity TipoUsuario
+  entity Vendedor
+  entity Cliente
+}
+
+together {
+  entity Marca
+  entity Modelo
+  entity FichaTecnica
+  entity Equipaje
+  entity Accesorio
+}
+
+entity Persona {
+  Cedula <<PK>>
+  Nombre
+  Domicilio
+  Correo
+}
+
+entity Usuario {
+  Persona <<PK, FK>>
+  Nombre
+  Clave
+}
+
+entity TipoUsuario {
+  Usuario <<PK>>
+  Tipo
+}
+
+entity Vendedor {
+  Persona <<PK, FK>>
+  Empresa <<FK>>
+}
+
+entity Cliente {
+  Persona <<PK, FK>>
+  UltimaCompra
+}
+
 entity Stock{
-  Automovil <<PK, FK>>
+  Modelo <<PK, FK>>
   Empresa <<PK, FK>>
+  Cantidad  
 }
 
 entity Automovil {
@@ -33,22 +85,14 @@ entity Modelo {
 entity Equipaje {
   Id <<PK>>
   Modelo <<FK>>
-  Accesorio
-  Extra
-  Precio
-}
-
-entity Vendedor {
-  Cedula <<PK>>
-  Empresa <<FK>>
-  Nombre
-  Domicilio
-  Correo
+  Accesorio <<FK>>
+  EsExtra
 }
 
 entity Venta {
   Id <<PK>>
   Vendedor <<FK>>
+  Cliente <<FK>>
   Automovil <<FK, UNIQUE>>
   FechaEntrega
   FechaVenta
@@ -63,6 +107,12 @@ entity Factura {
   Total
   FechaEmision
   MetodoPago
+}
+
+entity Accesorio {
+  Id <<PK>>
+  Nombre
+  Precio
 }
 
 entity ExtrasAplicados {
@@ -93,14 +143,14 @@ entity Empresa {
   Direccion
 }
 
-entity Consesionario {
-  Empresa <<PK, FK>>
-  Marca <<PK, FK>>
+entity TipoEmpresa {
+  Empresa <<PK>>
+  Tipo
 }
 
-entity Servicio {
-  Empresa <<PK, FK>>
-  Marca <<PK, FK>>
+entity MarcaEmpresa {
+   Empresa <<PK, FK>>
+   Marca <<PK, FK>>
 }
 
 entity DescuentoAutomovil {
@@ -110,25 +160,30 @@ entity DescuentoAutomovil {
 
 hide methods
 
-Empresa -- Stock: (1,N)
-Empresa -- Vendedor: (1,N)
-Empresa -- Consesionario: (1,N)
-Empresa -- Servicio: (1,N)
-Automovil -up- Stock: (1,N)
-Automovil -- Venta: (1,1)
+Empresa ||--|{ Stock
+Empresa |o--{ Vendedor
+Empresa ||--|| TipoEmpresa
+Empresa ||--{ MarcaEmpresa
+Stock }|--|| Modelo
+Automovil -- Venta: (0,1)
 Automovil -- Modelo: (N,1)
 Modelo -- Equipaje: (1,N)
 Modelo -- FichaTecnica: (1,1)
-Vendedor -- Venta: (1,N)
-Consesionario -- Marca: (1,N)
-Servicio -- Marca: (1,N)
+Vendedor -- Venta: (0,N)
+MarcaEmpresa }--|| Marca
 Marca -- Modelo: (1,N)
 Factura -- Venta: (1,1)
-Factura -- ExtrasAplicados: (1,N)
-Equipaje -- ExtrasAplicados: (1,N)
-DescuentoAplicado -- Factura: (1,N)
-DescuentoAplicado -- Descuento: (1,N)
-DescuentoAutomovil -- Automovil: (1,N)
-DescuentoAutomovil -- Descuento: (1,N)
+Factura -- ExtrasAplicados: (0,N)
+Equipaje -- ExtrasAplicados: (0,N)
+DescuentoAplicado -- Factura: (0,N)
+DescuentoAplicado -- Descuento: (0,N)
+DescuentoAutomovil -- Automovil: (0,N)
+DescuentoAutomovil -- Descuento: (0,N)
+Persona }o--|| Usuario
+Usuario ||--|| TipoUsuario
+Persona -- Vendedor: (0,1)
+Persona -- Cliente: (0,1)
+Venta -- Cliente: (1,1)
+Accesorio -- Equipaje: (1,N)
 
 @enduml

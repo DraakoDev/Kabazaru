@@ -1,0 +1,118 @@
+@startuml
+
+skinparam linetype ortho
+
+entity Concesionario {
+    NIT <<PK>>
+    Nombre
+    Direccion
+    Telefono
+}
+
+entity Marca {
+    Nombre <<PK>>
+}
+
+entity MarcaConcesionario {
+    NIT <<PK, FK>>
+    Marca <<PK, FK>>
+}
+
+entity ServicioOficial {
+    NIT <<PK>>
+    Concesionario <<FK>>
+    Nombre
+    Direccion
+    Telefono
+}
+
+entity Modelo {
+    Id <<PK>>
+    Marca <<FK>>
+    Nombre 
+}
+
+entity FichaTecnica {
+    Modelo <<PK, FK>>
+    Cilindraje
+    Potencia
+    Torque
+    Motor
+    Combustible
+    Carroceria
+    Color
+}
+
+entity Equipamiento {
+    Id <<PK>>
+    Modelo <<FK>>
+    Accesorio <<FK>>
+    EsExtra
+    Precio
+}
+
+entity Accesorio {
+    Id <<PK>>
+    Nombre
+}
+
+entity Automovil {
+    numero_bastidor <<PK>>
+    Modelo <<FK>>
+    Estado
+    Precio
+}
+
+entity Venta {
+    Id <<PK>>
+    Vehiculo <<FK Unique>>
+    FechaEntrega
+    FechaVenta
+    Matricula
+    Encargado
+    MetodoPago
+}
+
+entity ExtraVenta {
+    Venta <<PK, FK>>
+    Equipamiento <<PK, FK>>
+}
+
+entity Vendedor {
+    Cedula <<PK>>
+    Concesionario <<FK>>
+    Nombre
+    Apellido
+    Telefono
+}
+
+entity VentaConcesionario {
+    Venta <<PK, FK>>
+    Vendedor <<PK, FK>>
+}
+
+entity VentaServicioOficial {
+    Venta <<PK, FK>>
+    ServicioOficial <<PK, FK>>
+}
+
+hide methods
+
+Concesionario ||--o{ ServicioOficial
+Concesionario ||--|{ MarcaConcesionario
+Concesionario ||--o{ Vendedor
+Marca ||--o{ MarcaConcesionario
+Marca ||--o{ Modelo
+Modelo ||--o{ Automovil
+Modelo ||--|| FichaTecnica
+Modelo ||--|{Equipamiento
+Accesorio |o--|{ Equipamiento
+Venta ||--o{ VentaConcesionario
+Venta ||--o{ VentaServicioOficial
+Vendedor ||--o{ VentaConcesionario
+ServicioOficial ||--o{ VentaServicioOficial
+Automovil ||--o| Venta
+Equipamiento ||--o{ ExtraVenta
+Venta ||--o{ ExtraVenta
+
+@enduml
