@@ -1,5 +1,5 @@
 # Consesionario De Vehiculos
 
-## Diagrama ER-3FN V1
+## Diagrama ER-3FN V2
 
 ![](./image.png)

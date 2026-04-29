@@ -1,12 +1,28 @@
-@startuml
+@startuml Diagrama ER - Concesionario
 
 skinparam linetype ortho
 
-entity Concesionario {
+entity Empresa {
     NIT <<PK>>
     Nombre
     Direccion
     Telefono
+    Correo
+}
+
+entity RegistroEmpresa {
+    Empresa <<PK, FK>>
+    FechaRegistro
+    Tipo
+}
+
+entity Concesionario {
+    RegistroEmpresa <<PK, FK>>
+}
+
+entity ServicioOficial {
+    RegistroEmpresa <<PK, FK>>
+    Concesionario <<FK>>
 }
 
 entity Marca {
@@ -14,22 +30,15 @@ entity Marca {
 }
 
 entity MarcaConcesionario {
-    NIT <<PK, FK>>
+    Concesionario <<PK, FK>>
     Marca <<PK, FK>>
-}
-
-entity ServicioOficial {
-    NIT <<PK>>
-    Concesionario <<FK>>
-    Nombre
-    Direccion
-    Telefono
 }
 
 entity Modelo {
     Id <<PK>>
     Marca <<FK>>
     Nombre 
+    Precio
 }
 
 entity FichaTecnica {
@@ -59,60 +68,80 @@ entity Accesorio {
 entity Automovil {
     numero_bastidor <<PK>>
     Modelo <<FK>>
+    RegistroEmpresa <<FK>>
     Estado
-    Precio
 }
 
 entity Venta {
     Id <<PK>>
     Vehiculo <<FK Unique>>
+    Vendedor <<FK>>
     FechaEntrega
     FechaVenta
     Matricula
-    Encargado
+    EsEncargado
     MetodoPago
+    PrecioVenta
 }
 
 entity ExtraVenta {
     Venta <<PK, FK>>
     Equipamiento <<PK, FK>>
+    Precio
 }
 
-entity Vendedor {
+entity Persona {
     Cedula <<PK>>
-    Concesionario <<FK>>
     Nombre
     Apellido
     Telefono
 }
 
-entity VentaConcesionario {
-    Venta <<PK, FK>>
-    Vendedor <<PK, FK>>
+entity Usuario {
+    Persona <<PK, FK>>
+    NombreUsuario
+    Contrasena
+    Tipo <<ADMIN, CLIENTE>>
 }
 
-entity VentaServicioOficial {
-    Venta <<PK, FK>>
-    ServicioOficial <<PK, FK>>
+entity Vendedor {
+    Persona <<PK, FK>>
+    RegistroEmpresa <<FK>>
+}
+
+entity Descuento {
+    Id <<PK>>
+    Porcentaje
+    Descripcion
+}
+
+entity DescuentoAplicado {
+    Automovil <<PK, FK>>
+    Descuento <<PK, FK>>
 }
 
 hide methods
 
+Empresa ||--|| RegistroEmpresa
+RegistroEmpresa ||--o| Concesionario
+RegistroEmpresa ||--o| ServicioOficial
+RegistroEmpresa ||--o{ Vendedor
 Concesionario ||--o{ ServicioOficial
 Concesionario ||--|{ MarcaConcesionario
-Concesionario ||--o{ Vendedor
 Marca ||--o{ MarcaConcesionario
 Marca ||--o{ Modelo
 Modelo ||--o{ Automovil
 Modelo ||--|| FichaTecnica
 Modelo ||--|{Equipamiento
 Accesorio |o--|{ Equipamiento
-Venta ||--o{ VentaConcesionario
-Venta ||--o{ VentaServicioOficial
-Vendedor ||--o{ VentaConcesionario
-ServicioOficial ||--o{ VentaServicioOficial
 Automovil ||--o| Venta
 Equipamiento ||--o{ ExtraVenta
 Venta ||--o{ ExtraVenta
+Vendedor ||--o{ Venta
+Automovil ||--o{ DescuentoAplicado
+Descuento ||-right-o{ DescuentoAplicado
+RegistroEmpresa ||--o{ Automovil
+Persona ||--o| Usuario
+Persona ||--o| Vendedor
 
 @enduml
