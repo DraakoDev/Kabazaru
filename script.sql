@@ -19,7 +19,9 @@ CREATE TABLE RegistroEmpresa (
 
 CREATE TABLE Concesionario (
     Nit VARCHAR(20) NOT NULL PRIMARY KEY,
-    FOREIGN KEY (Nit) REFERENCES RegistroEmpresa(Nit)
+    TipoAutomoviles VARCHAR(100) NOT NULL,
+    FOREIGN KEY (Nit) REFERENCES RegistroEmpresa(Nit),
+    CHECK (TipoAutomoviles IN ('NUEVOS', 'USADOS', 'MIXTOS'))
 );
 
 CREATE TABLE ServicioOficial (
