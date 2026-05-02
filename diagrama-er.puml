@@ -49,7 +49,7 @@ entity FichaTecnica {
     Motor
     Combustible
     Carroceria
-    Color
+    Color <<FK>>
 }
 
 entity Equipamiento {
@@ -94,7 +94,9 @@ entity Persona {
     Cedula <<PK>>
     Nombre
     Apellido
+    Direccion
     Telefono
+    Correo
 }
 
 entity Usuario {
@@ -111,6 +113,7 @@ entity Vendedor {
 
 entity Descuento {
     Id <<PK>>
+    Nombre
     Porcentaje
     Descripcion
 }
@@ -118,6 +121,11 @@ entity Descuento {
 entity DescuentoAplicado {
     Automovil <<PK, FK>>
     Descuento <<PK, FK>>
+}
+
+entity Color {
+    Id <<PK>>
+    Nombre
 }
 
 hide methods
@@ -143,5 +151,5 @@ Descuento ||-right-o{ DescuentoAplicado
 RegistroEmpresa ||--o{ Automovil
 Persona ||--o| Usuario
 Persona ||--o| Vendedor
-
+Color ||--o{ FichaTecnica
 @enduml
