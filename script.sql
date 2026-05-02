@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS Concesionario;
+USE Concesionario;
+
 CREATE TABLE Empresa (
     Nit VARCHAR(20) PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
