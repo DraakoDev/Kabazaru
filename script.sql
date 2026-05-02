@@ -5,7 +5,7 @@ CREATE TABLE Empresa (
     Nit VARCHAR(20) PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Direccion VARCHAR(200) NOT NULL,
-    Telefono VARCHAR(20) NOT NULL
+    Telefono VARCHAR(20) NOT NULL,
     Correo VARCHAR(100) NOT NULL
 );
 
@@ -13,7 +13,8 @@ CREATE TABLE RegistroEmpresa (
     Nit VARCHAR(20) NOT NULL PRIMARY KEY,
     FechaRegistro DATE NOT NULL,
     TipoEmpresa VARCHAR(50) NOT NULL,
-    FOREIGN KEY (Nit) REFERENCES Empresa(Nit)
+    FOREIGN KEY (Nit) REFERENCES Empresa(Nit),
+    CHECK (TipoEmpresa IN ('CONCESIONARIO', 'SERVICIO'))
 );
 
 CREATE TABLE Concesionario (
@@ -24,9 +25,9 @@ CREATE TABLE Concesionario (
 CREATE TABLE ServicioOficial (
     Nit VARCHAR(20) NOT NULL PRIMARY KEY,
     ConcesionarioNit VARCHAR(20) NOT NULL,
-    FOREIGN KEY (Nit) REFERENCES RegistroEmpresa(Nit)
+    FOREIGN KEY (Nit) REFERENCES RegistroEmpresa(Nit),
     FOREIGN KEY (ConcesionarioNit) REFERENCES Concesionario(Nit)
-)
+);
 
 CREATE TABLE Persona (
     Cedula VARCHAR(20) PRIMARY KEY,
@@ -50,6 +51,7 @@ CREATE TABLE Usuario (
     Contrasena VARCHAR(100) NOT NULL,
     Tipo VARCHAR(20) NOT NULL,
     FOREIGN KEY (Cedula) REFERENCES Persona(Cedula),
+    CHECK (Tipo IN ('ADMIN', 'VENDEDOR'))
 );
 
 CREATE TABLE Marca (
@@ -61,7 +63,8 @@ CREATE TABLE Modelo (
     MarcaNombre VARCHAR(50) NOT NULL,
     Nombre VARCHAR(50) NOT NULL,
     Precio DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (MarcaNombre) REFERENCES Marca(Nombre)
+    FOREIGN KEY (MarcaNombre) REFERENCES Marca(Nombre),
+    UNIQUE (MarcaNombre, Nombre)
 );
 
 CREATE TABLE Automovil (
@@ -70,7 +73,8 @@ CREATE TABLE Automovil (
     Estado VARCHAR(20) NOT NULL,
     RegistroEmpresaNit VARCHAR(20) NOT NULL,
     FOREIGN KEY (ModeloId) REFERENCES Modelo (Id),
-    FOREIGN KEY (RegistroEmpresaNit) REFERENCES RegistroEmpresa(Nit)
+    FOREIGN KEY (RegistroEmpresaNit) REFERENCES RegistroEmpresa(Nit),
+    CHECK (Estado IN ('DISPONIBLE', 'VENDIDO', 'PROCESO'))
 );
 
 CREATE TABLE Color (
@@ -87,13 +91,13 @@ CREATE TABLE FichaTecnica (
     Combustible VARCHAR(50) NOT NULL,
     Carroceria VARCHAR(50) NOT NULL,
     Color INT NOT NULL,
-    FOREIGN KEY (ModeloId) REFERENCES Modelo(Id)
-    FOREIGN KEY (Color) REFERENCES Color(Id);
+    FOREIGN KEY (ModeloId) REFERENCES Modelo(Id),
+    FOREIGN KEY (Color) REFERENCES Color(Id)
 );
 
 CREATE TABLE Accesorio (
     Id INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(50) NOT NULL,
+    Nombre VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Equipamiento (
@@ -118,6 +122,7 @@ CREATE TABLE Venta (
     PrecioVenta DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (NumeroBastidor) REFERENCES Automovil(NumeroBastidor),
     FOREIGN KEY (CedulaVendedor) REFERENCES Vendedor(Cedula),
+    CHECK (MetodoPago IN ('EFECTIVO', 'TARJETA', 'FINANCIAMIENTO'))
 );
 
 CREATE TABLE ExtraVenta (
