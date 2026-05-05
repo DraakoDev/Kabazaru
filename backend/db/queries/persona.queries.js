@@ -1,0 +1,1 @@
+const INSERTAR_PERSONA = "INSERT INTO Persona VALUES (?, ?, ?, ?, ? ,?)";

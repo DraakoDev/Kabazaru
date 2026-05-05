@@ -7,7 +7,6 @@ export const CrearCuenta = () => {
     <div className="flex flex-col">
       <Cabezera />
       <CrearUsuarioForm />
-      <PiePagina />
     </div>
   );
 };

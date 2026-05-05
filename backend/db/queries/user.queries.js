@@ -1,0 +1,1 @@
+const INSERTAR_USUARIO = "INSERT INTO Usuario VALUES (? ,?, ?, ?)";
