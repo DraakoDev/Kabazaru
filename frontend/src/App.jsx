@@ -6,7 +6,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="register" element={<CrearCuenta />} />
+          <Route path="registro" element={<CrearCuenta />} />
         </Routes>
       </BrowserRouter>
     </>
