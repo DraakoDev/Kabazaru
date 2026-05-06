@@ -1,1 +1,1 @@
-const INSERTAR_USUARIO = "INSERT INTO Usuario VALUES (? ,?, ?, ?)";
+export const INSERTAR_USUARIO = "INSERT INTO Usuario VALUES (? ,?, ?, ?)";

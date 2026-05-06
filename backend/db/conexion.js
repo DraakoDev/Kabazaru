@@ -1,9 +1,10 @@
 import mariadb from 'mariadb';
-import { proccess } from 'dotenv/config'
+import 'dotenv/config';
 
 export const pool = await mariadb.createPool({
-    host: proccess.env.HOST,
-    user: proccess.env.USER,
-    password: proccess.env.PASSWORD,
-    db: proccess.env.DB,
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    db: process.env.DB,
 });
+
