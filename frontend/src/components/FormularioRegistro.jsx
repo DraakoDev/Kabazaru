@@ -1,11 +1,11 @@
-import logo from "../assets/logo.png";
-import id_card from "../assets/id_card.svg";
-import person from "../assets/person.svg";
-import mapin from "../assets/mapin.svg";
-import phone from "../assets/phone.svg";
-import emailico from "../assets/emailico.svg";
-import passkey from "../assets/passkey.svg";
-import arroba from "../assets/arroba.svg";
+import Swal from 'sweetalert2'
+import id_card from "../assets/id_card.svg"
+import person from "../assets/person.svg"
+import mapin from "../assets/mapin.svg"
+import phone from "../assets/phone.svg"
+import emailico from "../assets/emailico.svg"
+import passkey from "../assets/passkey.svg"
+import arroba from "../assets/arroba.svg"
 import { useState } from "react";
 
 export const FormularioRegistro = () => {
@@ -27,9 +27,8 @@ export const FormularioRegistro = () => {
 
   const submitData = async (e) => {
     e.preventDefault();
-    console.log("Data: ", formData);
     try {
-      const response = await fetch("http://localhost:3000/registrar", {
+      const response = await fetch("http://localhost:3000/register", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -38,7 +37,26 @@ export const FormularioRegistro = () => {
       });
 
       const data = await response.json();
+      if(data.success) {
+        Swal.fire({
+          title: "Usuario Registrado!",
+          text: "El registro ha sido exitoso!",
+          icon: "success"
+        })
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: data.error,
+          icon: "warning"
+        })
+      }
+      
     } catch (error) {
+      Swal.fire({
+          title: "(|||❛︵❛。)",
+          text: "No fue posible conectarse al servidor!",
+          icon: "error"
+        })
       console.log("Error enviando los datos", error);
     }
   };

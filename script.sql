@@ -1,152 +1,178 @@
-CREATE DATABASE IF NOT EXISTS Concesionario;
-USE Concesionario;
+CREATE DATABASE IF NOT EXISTS concesionario_db;
+USE concesionario_db;
 
-CREATE TABLE Empresa (
-    Nit VARCHAR(20) PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    Direccion VARCHAR(200) NOT NULL,
-    Telefono VARCHAR(20) NOT NULL,
-    Correo VARCHAR(100) NOT NULL
+CREATE TABLE empresa (
+    nit VARCHAR(20) PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(200) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE RegistroEmpresa (
-    Nit VARCHAR(20) NOT NULL PRIMARY KEY,
-    FechaRegistro DATE NOT NULL,
-    TipoEmpresa VARCHAR(50) NOT NULL,
-    FOREIGN KEY (Nit) REFERENCES Empresa(Nit),
-    CHECK (TipoEmpresa IN ('CONCESIONARIO', 'SERVICIO'))
+CREATE TABLE registro_empresa (
+    nit VARCHAR(20) NOT NULL PRIMARY KEY,
+    fecha_registro DATE NOT NULL,
+    tipo_empresa VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_registro_empresa_empresa
+        FOREIGN KEY (nit) REFERENCES empresa(nit),
+    CONSTRAINT chk_tipo_empresa
+        CHECK (tipo_empresa IN ('CONCESIONARIO', 'SERVICIO'))
 );
 
-CREATE TABLE Concesionario (
-    Nit VARCHAR(20) NOT NULL PRIMARY KEY,
-    TipoAutomoviles VARCHAR(100) NOT NULL,
-    FOREIGN KEY (Nit) REFERENCES RegistroEmpresa(Nit),
-    CHECK (TipoAutomoviles IN ('NUEVOS', 'USADOS', 'MIXTOS'))
+CREATE TABLE concesionario (
+    nit VARCHAR(20) NOT NULL PRIMARY KEY,
+    tipo_automoviles VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_concesionario_registro_empresa
+        FOREIGN KEY (nit) REFERENCES registro_empresa(nit),
+    CONSTRAINT chk_tipo_automoviles
+        CHECK (tipo_automoviles IN ('NUEVOS', 'USADOS', 'MIXTOS'))
 );
 
-CREATE TABLE ServicioOficial (
-    Nit VARCHAR(20) NOT NULL PRIMARY KEY,
-    ConcesionarioNit VARCHAR(20) NOT NULL,
-    FOREIGN KEY (Nit) REFERENCES RegistroEmpresa(Nit),
-    FOREIGN KEY (ConcesionarioNit) REFERENCES Concesionario(Nit)
+CREATE TABLE servicio_oficial (
+    nit VARCHAR(20) NOT NULL PRIMARY KEY,
+    concesionario_nit VARCHAR(20) NOT NULL,
+    CONSTRAINT fk_servicio_oficial_registro_empresa
+        FOREIGN KEY (nit) REFERENCES registro_empresa(nit),
+    CONSTRAINT fk_servicio_oficial_concesionario
+        FOREIGN KEY (concesionario_nit) REFERENCES concesionario(nit)
 );
 
-CREATE TABLE Persona (
-    Cedula VARCHAR(20) PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    Apellido VARCHAR(100) NOT NULL,
-    Direccion VARCHAR(200) NOT NULL,
-    Telefono VARCHAR(20) NOT NULL,
-    Correo VARCHAR(100) NOT NULL
+CREATE TABLE persona (
+    cedula VARCHAR(20) PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    direccion VARCHAR(200) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE Vendedor (
-    Cedula VARCHAR(20) NOT NULL PRIMARY KEY,
-    RegistroEmpresaNit VARCHAR(20) NOT NULL,
-    FOREIGN KEY (Cedula) REFERENCES Persona(Cedula),
-    FOREIGN KEY (RegistroEmpresaNit) REFERENCES RegistroEmpresa(Nit)
+CREATE TABLE vendedor (
+    cedula VARCHAR(20) NOT NULL PRIMARY KEY,
+    registro_empresa_nit VARCHAR(20) NOT NULL,
+    CONSTRAINT fk_vendedor_persona
+        FOREIGN KEY (cedula) REFERENCES persona(cedula),
+    CONSTRAINT fk_vendedor_registro_empresa
+        FOREIGN KEY (registro_empresa_nit) REFERENCES registro_empresa(nit)
 );
 
-CREATE TABLE Usuario (
-    Cedula VARCHAR(20) NOT NULL PRIMARY KEY,
-    NombreUsuario VARCHAR(50) NOT NULL,
-    Contrasena VARCHAR(100) NOT NULL,
-    Tipo VARCHAR(20) NOT NULL,
-    FOREIGN KEY (Cedula) REFERENCES Persona(Cedula),
-    CHECK (Tipo IN ('ADMIN', 'VENDEDOR'))
+CREATE TABLE usuario (
+    cedula VARCHAR(20) NOT NULL PRIMARY KEY,
+    nombre_usuario VARCHAR(50) NOT NULL,
+    contrasena VARCHAR(100) NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    CONSTRAINT fk_usuario_persona
+        FOREIGN KEY (cedula) REFERENCES persona(cedula),
+    CONSTRAINT chk_usuario_tipo
+        CHECK (tipo IN ('ADMIN', 'VENDEDOR', 'CLIENTE'))
 );
 
-CREATE TABLE Marca (
-    Nombre VARCHAR(50) PRIMARY KEY
+CREATE TABLE marca (
+    nombre VARCHAR(50) PRIMARY KEY
 );
 
-CREATE TABLE Modelo (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    MarcaNombre VARCHAR(50) NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (MarcaNombre) REFERENCES Marca(Nombre),
-    UNIQUE (MarcaNombre, Nombre)
+CREATE TABLE modelo (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    marca_nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_modelo_marca
+        FOREIGN KEY (marca_nombre) REFERENCES marca(nombre),
+    CONSTRAINT uq_modelo_marca_nombre
+        UNIQUE (marca_nombre, nombre)
 );
 
-CREATE TABLE Automovil (
-    NumeroBastidor VARCHAR(20) PRIMARY KEY,
-    ModeloId INT NOT NULL,
-    Estado VARCHAR(20) NOT NULL,
-    RegistroEmpresaNit VARCHAR(20) NOT NULL,
-    FOREIGN KEY (ModeloId) REFERENCES Modelo (Id),
-    FOREIGN KEY (RegistroEmpresaNit) REFERENCES RegistroEmpresa(Nit),
-    CHECK (Estado IN ('DISPONIBLE', 'VENDIDO', 'PROCESO'))
+CREATE TABLE automovil (
+    numero_bastidor VARCHAR(20) PRIMARY KEY,
+    modelo_id INT NOT NULL,
+    estado VARCHAR(20) NOT NULL,
+    registro_empresa_nit VARCHAR(20) NOT NULL,
+    CONSTRAINT fk_automovil_modelo
+        FOREIGN KEY (modelo_id) REFERENCES modelo(id),
+    CONSTRAINT fk_automovil_registro_empresa
+        FOREIGN KEY (registro_empresa_nit) REFERENCES registro_empresa(nit),
+    CONSTRAINT chk_automovil_estado
+        CHECK (estado IN ('DISPONIBLE', 'VENDIDO', 'PROCESO'))
 );
 
-CREATE TABLE Color (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(50) NOT NULL
+CREATE TABLE color (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE FichaTecnica (
-    ModeloId INT NOT NULL PRIMARY KEY,
-    Cilindraje DECIMAL(10, 2) NOT NULL,
-    Potencia DECIMAL(10, 2) NOT NULL,
-    Torque DECIMAL(10, 2) NOT NULL,
-    Motor VARCHAR(50) NOT NULL,
-    Combustible VARCHAR(50) NOT NULL,
-    Carroceria VARCHAR(50) NOT NULL,
-    Color INT NOT NULL,
-    FOREIGN KEY (ModeloId) REFERENCES Modelo(Id),
-    FOREIGN KEY (Color) REFERENCES Color(Id)
+CREATE TABLE ficha_tecnica (
+    modelo_id INT NOT NULL PRIMARY KEY,
+    cilindraje DECIMAL(10, 2) NOT NULL,
+    potencia DECIMAL(10, 2) NOT NULL,
+    torque DECIMAL(10, 2) NOT NULL,
+    motor VARCHAR(50) NOT NULL,
+    combustible VARCHAR(50) NOT NULL,
+    carroceria VARCHAR(50) NOT NULL,
+    color_id INT NOT NULL,
+    CONSTRAINT fk_ficha_tecnica_modelo
+        FOREIGN KEY (modelo_id) REFERENCES modelo(id),
+    CONSTRAINT fk_ficha_tecnica_color
+        FOREIGN KEY (color_id) REFERENCES color(id)
 );
 
-CREATE TABLE Accesorio (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(50) NOT NULL
+CREATE TABLE accesorio (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Equipamiento (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    ModeloId INT NOT NULL,
-    AccesorioId INT NOT NULL,
-    EsExtra BOOLEAN NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (ModeloId) REFERENCES Modelo(Id),
-    FOREIGN KEY (AccesorioId) REFERENCES Accesorio(Id)
+CREATE TABLE equipamiento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    modelo_id INT NOT NULL,
+    accesorio_id INT NOT NULL,
+    es_extra BOOLEAN NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_equipamiento_modelo
+        FOREIGN KEY (modelo_id) REFERENCES modelo(id),
+    CONSTRAINT fk_equipamiento_accesorio
+        FOREIGN KEY (accesorio_id) REFERENCES accesorio(id)
 );
 
-CREATE TABLE Venta (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    NumeroBastidor VARCHAR(20) NOT NULL UNIQUE,
-    CedulaVendedor VARCHAR(20) NOT NULL,
-    FechaEntrega DATE NOT NULL,
-    FechaVenta DATE NOT NULL,
-    MatriculaAsignada VARCHAR(20) NOT NULL,
-    EsEncargo BOOLEAN NOT NULL,
-    MetodoPago VARCHAR(50) NOT NULL,
-    PrecioVenta DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (NumeroBastidor) REFERENCES Automovil(NumeroBastidor),
-    FOREIGN KEY (CedulaVendedor) REFERENCES Vendedor(Cedula),
-    CHECK (MetodoPago IN ('EFECTIVO', 'TARJETA', 'FINANCIAMIENTO'))
+CREATE TABLE venta (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    numero_bastidor VARCHAR(20) NOT NULL UNIQUE,
+    cedula_vendedor VARCHAR(20) NOT NULL,
+    fecha_entrega DATE NOT NULL,
+    fecha_venta DATE NOT NULL,
+    matricula_asignada VARCHAR(20) NOT NULL UNIQUE,
+    es_encargo BOOLEAN NOT NULL,
+    metodo_pago VARCHAR(50) NOT NULL,
+    precio_venta DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_venta_automovil
+        FOREIGN KEY (numero_bastidor) REFERENCES automovil(numero_bastidor),
+    CONSTRAINT fk_venta_vendedor
+        FOREIGN KEY (cedula_vendedor) REFERENCES vendedor(cedula),
+    CONSTRAINT chk_venta_metodo_pago
+        CHECK (metodo_pago IN ('EFECTIVO', 'TARJETA', 'FINANCIAMIENTO'))
 );
 
-CREATE TABLE ExtraVenta (
-    VentaId INT NOT NULL, 
-    EquipamientoId INT NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (VentaId, EquipamientoId),
-    FOREIGN KEY (VentaId) REFERENCES Venta(Id),
-    FOREIGN KEY (EquipamientoId) REFERENCES Equipamiento(Id)
+CREATE TABLE extra_venta (
+    venta_id INT NOT NULL,
+    equipamiento_id INT NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (venta_id, equipamiento_id),
+    CONSTRAINT fk_extra_venta_venta
+        FOREIGN KEY (venta_id) REFERENCES venta(id),
+    CONSTRAINT fk_extra_venta_equipamiento
+        FOREIGN KEY (equipamiento_id) REFERENCES equipamiento(id)
 );
 
-CREATE TABLE Descuento (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(50) NOT NULL,
-    Porcentaje DECIMAL(5, 2) NOT NULL, 
-    Descripcion VARCHAR(200) NOT NULL
+CREATE TABLE descuento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    porcentaje DECIMAL(5, 2) NOT NULL,
+    descripcion VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE DescuentoAplicado (
-    AutomovilId VARCHAR(20) NOT NULL,
-    DescuentoId INT NOT NULL,
-    PRIMARY KEY (AutomovilId, DescuentoId),
-    FOREIGN KEY (AutomovilId) REFERENCES Automovil(NumeroBastidor),
-    FOREIGN KEY (DescuentoId) REFERENCES Descuento(Id)
+CREATE TABLE descuento_aplicado (
+    automovil_id VARCHAR(20) NOT NULL,
+    descuento_id INT NOT NULL,
+    PRIMARY KEY (automovil_id, descuento_id),
+    CONSTRAINT fk_descuento_aplicado_automovil
+        FOREIGN KEY (automovil_id) REFERENCES automovil(numero_bastidor),
+    CONSTRAINT fk_descuento_aplicado_descuento
+        FOREIGN KEY (descuento_id) REFERENCES descuento(id)
 );
