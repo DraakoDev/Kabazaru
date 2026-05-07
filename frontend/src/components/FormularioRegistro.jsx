@@ -1,12 +1,14 @@
-import Swal from 'sweetalert2'
-import id_card from "../assets/id_card.svg"
-import person from "../assets/person.svg"
-import mapin from "../assets/mapin.svg"
-import phone from "../assets/phone.svg"
-import emailico from "../assets/emailico.svg"
-import passkey from "../assets/passkey.svg"
-import arroba from "../assets/arroba.svg"
+import Swal from "sweetalert2";
 import { useState } from "react";
+import { Link } from "react-router";
+import id_card from "../assets/id_card.svg";
+import person from "../assets/person.svg";
+import mapin from "../assets/mapin.svg";
+import phone from "../assets/phone.svg";
+import emailico from "../assets/emailico.svg";
+import passkey from "../assets/passkey.svg";
+import arroba from "../assets/arroba.svg";
+import grupos from "../assets/grupos.svg";
 
 export const FormularioRegistro = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ export const FormularioRegistro = () => {
     telefono: "",
     correo: "",
     direccion: "",
+    tipo_usuario: "",
     username: "",
     password: "",
   });
@@ -23,6 +26,7 @@ export const FormularioRegistro = () => {
   const change = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    console.log(formData);
   };
 
   const submitData = async (e) => {
@@ -37,26 +41,25 @@ export const FormularioRegistro = () => {
       });
 
       const data = await response.json();
-      if(data.success) {
+      if (data.success) {
         Swal.fire({
           title: "Usuario Registrado!",
           text: "El registro ha sido exitoso!",
-          icon: "success"
-        })
+          icon: "success",
+        });
       } else {
         Swal.fire({
           title: "Error",
           text: data.error,
-          icon: "warning"
-        })
+          icon: "warning",
+        });
       }
-      
     } catch (error) {
       Swal.fire({
-          title: "(|||❛︵❛。)",
-          text: "No fue posible conectarse al servidor!",
-          icon: "error"
-        })
+        title: "(|||❛︵❛。)",
+        text: "No fue posible conectarse al servidor!",
+        icon: "error",
+      });
       console.log("Error enviando los datos", error);
     }
   };
@@ -189,7 +192,7 @@ export const FormularioRegistro = () => {
             </div>
           </div>
         </fieldset>
-        <hr className="text-zinc-400 mt-8 mb-8 " />
+        <hr className="text-amber-400 mt-8 mb-8 " />
         <fieldset className="mt-4">
           <div>
             <div className="inline-block w-1/2 pr-2">
@@ -231,6 +234,28 @@ export const FormularioRegistro = () => {
               </div>
             </div>
           </div>
+          <div className="mt-4">
+            <label htmlFor="tipo_usuario">Tipo de usuario</label>
+            <div className="relative">
+              <img
+                src={grupos}
+                className="absolute left-3 top-1/2 -translate-y-1/2"
+              />
+              <select
+                className="w-full h-11 pl-10 pr-4 rounded-lg bg-white border border-zinc-300 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all appearance-none cursor-pointer"
+                id="tipo_usuario"
+                name="tipo_usuario"
+                onChange={change}
+                required
+              >
+                <option value="" disabled>
+                  Seleccione un tipo
+                </option>
+                <option value="cliente">Cliente</option>
+                <option value="vendedor">Vendedor</option>
+              </select>
+            </div>
+          </div>
         </fieldset>
         <div>
           <input
@@ -242,7 +267,9 @@ export const FormularioRegistro = () => {
       </form>
       <span className="block text-center mt-8">
         ¿Ya tienes una cuenta?{" "}
-        <span className="text-amber-600">Iniciar Sesion</span>
+        <Link to="/login" className="text-amber-600">
+          Iniciar Sesion
+        </Link>
       </span>
     </div>
   );

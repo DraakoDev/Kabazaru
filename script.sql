@@ -57,7 +57,7 @@ CREATE TABLE vendedor (
 
 CREATE TABLE usuario (
     cedula VARCHAR(20) NOT NULL PRIMARY KEY,
-    nombre_usuario VARCHAR(50) NOT NULL,
+    nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
     contrasena VARCHAR(100) NOT NULL,
     tipo VARCHAR(20) NOT NULL,
     CONSTRAINT fk_usuario_persona

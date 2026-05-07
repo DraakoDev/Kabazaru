@@ -1,7 +1,26 @@
 import { pool } from '../db/conexion.js'
 import { INSERTAR_PERSONA } from '../db/queries/persona.queries.js'
-import { INSERTAR_USUARIO } from '../db/queries/user.queries.js'
+import { INSERTAR_USUARIO, SELECCIONAR_USUARIO } from '../db/queries/user.queries.js'
 import bcrypt from 'bcrypt'
+
+export const getUserInDB = async (user) => {
+  const data = await pool.query(SELECCIONAR_USUARIO, user)
+  return data[0]
+}
+
+export const passwordMatches = async (clientPassword, bdUserPassword) => {
+  return await bcrypt.compare(clientPassword, bdUserPassword)
+}
+
+export const checkLogin = async ({ username, password }) => {
+  const user = await getUserInDB(username)
+  if (user === undefined) throw new Error('El usuario no esta registrado')
+  const isValid = await passwordMatches(password, user.contrasena)
+  if (!isValid) throw new Error('La contrasena es incorrecta')
+
+  const { contrasena: _, ...publicUser } = user
+  return publicUser
+}
 
 export const crearPersona = async (conexion, persona) => {
   return await conexion.query(INSERTAR_PERSONA, [
@@ -30,7 +49,7 @@ export const crearUsuario = async (persona) => {
       persona.cedula,
       persona.username,
       hashedPassword,
-      'CLIENTE'
+      persona.tipo_usuario.toUpperCase()
     ])
 
     await conexion.commit()
@@ -45,6 +64,8 @@ export const crearUsuario = async (persona) => {
       if (error.message.includes('PRIMARY')) throw new Error('El usuario ya existe')
 
       if (error.message.includes('correo')) throw new Error('Ya existe un usuario registrado con ese correo electronico')
+
+      if (error.message.includes('nombre_usuario')) throw new Error('Ya existe un usuario registrado con ese nombre de usuario')
     }
     throw new Error('El usuario no pudo ser creado!!!')
   } finally {

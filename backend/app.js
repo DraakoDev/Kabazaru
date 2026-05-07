@@ -1,11 +1,11 @@
-import express from 'express';
-import router from './routes/login.routes.js';
+import express from 'express'
+import router from './routes/login.routes.js'
 import cors from 'cors'
 
-const app = express();
+const app = express()
 
-app.use(express.json());
-app.use(cors({origin: 'http://localhost:5173'}))
-app.use(router);
+app.use(express.json())
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+app.use(router)
 
-export default app;
+export default app
