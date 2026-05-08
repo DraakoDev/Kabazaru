@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import id_card from "../assets/id_card.svg";
 import person from "../assets/person.svg";
 import mapin from "../assets/mapin.svg";
@@ -11,6 +11,7 @@ import arroba from "../assets/arroba.svg";
 import grupos from "../assets/grupos.svg";
 
 export const FormularioRegistro = () => {
+  let navigate = useNavigate();
   const [formData, setFormData] = useState({
     cedula: "",
     nombre: "",
@@ -26,9 +27,8 @@ export const FormularioRegistro = () => {
   const change = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(formData);
   };
-
+  
   const submitData = async (e) => {
     e.preventDefault();
     try {
@@ -47,6 +47,7 @@ export const FormularioRegistro = () => {
           text: "El registro ha sido exitoso!",
           icon: "success",
         });
+        navigate('/login')
       } else {
         Swal.fire({
           title: "Error",
@@ -246,6 +247,7 @@ export const FormularioRegistro = () => {
                 id="tipo_usuario"
                 name="tipo_usuario"
                 onChange={change}
+                defaultValue=""
                 required
               >
                 <option value="" disabled>

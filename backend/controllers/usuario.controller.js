@@ -34,3 +34,9 @@ export const logearUsuario = async (req, res) => {
     res.status(401).send({ success: false, error: error.message })
   }
 }
+
+export const vercookie = (req, res) => {
+  console.log(req.session)
+  if (req.session.user === null) return res.status(401).send({ session: 'non-active' })
+  res.status(200).send({ session: 'active' })
+}

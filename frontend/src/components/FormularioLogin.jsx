@@ -9,22 +9,31 @@ export const FormularioLogin = () => {
 
   const submitData = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3000/login", {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: JSON.stringify(loginData),
-    });
-    const data = await response.json();
-    console.log(data);
-    if (!data.success) {
-      Swal.fire({
-        title: "Error",
-        text: data.error,
-        icon: "warning",
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "post",
+        body: JSON.stringify(loginData),
       });
+      const data = await response.json();
+      console.log(data);
+      if (!data.success) {
+        Swal.fire({
+          title: "Error",
+          text: data.error,
+          icon: "warning",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "(|||❛︵❛。)",
+        text: "No fue posible conectarse al servidor!",
+        icon: "error",
+      });
+      console.log("Error enviando los datos", error);
     }
   };
 

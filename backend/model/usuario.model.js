@@ -61,12 +61,14 @@ export const crearUsuario = async (persona) => {
     if (conexion) await conexion.rollback()
 
     if (error.code === 'ER_DUP_ENTRY') {
-      if (error.message.includes('PRIMARY')) throw new Error('El usuario ya existe')
+      if (error.message.includes('PRIMARY')) throw new Error('Ya hay un usuario registrado con ese numero de cedula')
 
       if (error.message.includes('correo')) throw new Error('Ya existe un usuario registrado con ese correo electronico')
 
       if (error.message.includes('nombre_usuario')) throw new Error('Ya existe un usuario registrado con ese nombre de usuario')
     }
+
+    console.log(error.message)
     throw new Error('El usuario no pudo ser creado!!!')
   } finally {
     if (conexion) conexion.release()
