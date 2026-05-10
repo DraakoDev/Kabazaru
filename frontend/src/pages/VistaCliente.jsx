@@ -1,226 +1,208 @@
-import { useAuth } from "../hooks/useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
+
+import {
+  ShoppingCart,
+  Heart,
+  Car,
+  DollarSign,
+} from "lucide-react";
+
+import { StatCard } from "../components/ui/StatCard";
 
 export const VistaCliente = () => {
 
-    const {
-        user,
-        logout,
-        loading,
-        error
-    } = useAuth();
+  const navigate = useNavigate();
 
+  useEffect(() => {
 
-    const handleLogout = () => {
+    const verificarSesion = async () => {
 
-        logout();
+      try {
 
-        window.location.href = "/";
+        const response = await fetch(
+          `${backendURL}/login`,
+          {
+            credentials: "include",
 
-    };
+            headers: {
+              "Content-Type": "application/json",
+            },
 
-    if (loading) {
+            method: "post",
 
-        return (
-
-            <div className="contenedor-loading">
-
-                <h2>Cargando información...</h2>
-
-            </div>
-
+            body: JSON.stringify(
+              Cookies.get("access_token")
+            ),
+          }
         );
 
-    }
+        const data = await response.json();
 
+        if (data.session === "non-active") {
+          navigate("/login");
+        }
 
-    return (
+      } catch (error) {
 
-        <div className="cliente-container">
+        console.log(
+          "No fue posible solicitar acceso",
+          error.message
+        );
 
-            {/* ==========================
-                SIDEBAR
-            ========================== */}
-            <aside className="sidebar">
+      }
+    };
 
-                <div className="logo">
+    verificarSesion();
 
-                    <h2>Kabazaru</h2>
+  }, []);
 
-                </div>
+  return (
 
-                <nav className="menu">
+    <div className="space-y-8">
 
-                    <button className="menu-btn">
-                        Inicio
-                    </button>
+      {/* HEADER */}
 
-                    <button className="menu-btn">
-                        Vehículos
-                    </button>
+      <section>
 
-                    <button className="menu-btn">
-                        Compras
-                    </button>
+        <h1 className="text-4xl font-black text-slate-800">
+          Panel del cliente
+        </h1>
 
-                    <button className="menu-btn">
-                        Perfil
-                    </button>
+        <p className="text-slate-500 mt-2">
+          Consulta tus compras y vehículos favoritos.
+        </p>
 
-                </nav>
+      </section>
 
-                <button
-                    className="logout-btn"
-                    onClick={handleLogout}
-                >
-                    Cerrar Sesión
-                </button>
+      {/* STATS */}
 
-            </aside>
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-            {/* ==========================
-                CONTENIDO
-            ========================== */}
-            <main className="contenido">
+        <StatCard
+          title="Compras"
+          value="12"
+          icon={<ShoppingCart />}
+        />
 
-                {/* ======================
-                    HEADER
-                ====================== */}
-                <header className="header">
+        <StatCard
+          title="Favoritos"
+          value="28"
+          icon={<Heart />}
+        />
 
-                    <div>
+        <StatCard
+          title="Vehículos vistos"
+          value="134"
+          icon={<Car />}
+        />
 
-                        <h1>
-                            Bienvenido,
-                            {" "}
-                            {user?.nombre_usuario}
-                        </h1>
+        <StatCard
+          title="Presupuesto"
+          value="$80M"
+          icon={<DollarSign />}
+        />
 
-                        <p>
-                            Panel principal del cliente
-                        </p>
+      </section>
 
-                    </div>
+      {/* TABLA */}
 
-                </header>
+      <section className="glass rounded-3xl p-6 overflow-hidden">
 
-                {/* ======================
-                    ERROR
-                ====================== */}
-                {
-                    error && (
+        <div className="flex items-center justify-between mb-6">
 
-                        <div className="error-box">
+          <h2 className="text-2xl font-bold">
+            Vehículos favoritos
+          </h2>
 
-                            <p>{error}</p>
-
-                        </div>
-
-                    )
-                }
-
-                {/* ======================
-                    TARJETAS
-                ====================== */}
-                <section className="cards-container">
-
-                    <div className="card">
-
-                        <h3>Vehículos Disponibles</h3>
-
-                        <p>
-                            Explora el catálogo completo
-                            de vehículos disponibles.
-                        </p>
-
-                    </div>
-
-                    <div className="card">
-
-                        <h3>Mis Compras</h3>
-
-                        <p>
-                            Consulta tus vehículos
-                            comprados recientemente.
-                        </p>
-
-                    </div>
-
-                    <div className="card">
-
-                        <h3>Mi Perfil</h3>
-
-                        <p>
-                            Administra tu información
-                            personal.
-                        </p>
-
-                    </div>
-
-                </section>
-
-                {/* ======================
-                    TABLA
-                ====================== */}
-                <section className="tabla-section">
-
-                    <h2>
-                        Últimos Vehículos
-                    </h2>
-
-                    <table className="tabla">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Precio</th>
-                                <th>Estado</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-
-                                <td>Toyota</td>
-                                <td>Corolla 2024</td>
-                                <td>$90.000.000</td>
-                                <td>Disponible</td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>Mazda</td>
-                                <td>CX-5</td>
-                                <td>$120.000.000</td>
-                                <td>Disponible</td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>Kia</td>
-                                <td>Sportage</td>
-                                <td>$110.000.000</td>
-                                <td>Vendido</td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </section>
-
-            </main>
+          <button className="
+            bg-orange-500
+            hover:bg-orange-600
+            text-white
+            px-5
+            py-3
+            rounded-2xl
+            transition
+          ">
+            Explorar vehículos
+          </button>
 
         </div>
 
-    );
+        <div className="overflow-x-auto">
 
+          <table className="w-full">
+
+            <thead>
+
+              <tr className="border-b border-slate-200 text-left">
+
+                <th className="pb-4">Marca</th>
+                <th className="pb-4">Modelo</th>
+                <th className="pb-4">Precio</th>
+                <th className="pb-4">Estado</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr className="border-b border-slate-100 hover:bg-slate-50 transition">
+
+                <td className="py-4">BMW</td>
+                <td>X5</td>
+                <td>$240.000.000</td>
+
+                <td>
+
+                  <span className="
+                    bg-green-100
+                    text-green-700
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                  ">
+                    Disponible
+                  </span>
+
+                </td>
+
+              </tr>
+
+              <tr className="border-b border-slate-100 hover:bg-slate-50 transition">
+
+                <td className="py-4">Audi</td>
+                <td>A4</td>
+                <td>$180.000.000</td>
+
+                <td>
+
+                  <span className="
+                    bg-yellow-100
+                    text-yellow-700
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                  ">
+                    Reservado
+                  </span>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </div>
+  );
 };
