@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
+import { backendURL } from "../config";
 
 import {
   ShoppingCart,

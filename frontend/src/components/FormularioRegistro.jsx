@@ -9,7 +9,8 @@ import emailico from "../assets/emailico.svg";
 import passkey from "../assets/passkey.svg";
 import arroba from "../assets/arroba.svg";
 import grupos from "../assets/grupos.svg";
-import {backendURL} from "../congi.js"
+import {backendURL} from "../config.js"
+
 export const FormularioRegistro = () => {
   let navigate = useNavigate();
   const [formData, setFormData] = useState({

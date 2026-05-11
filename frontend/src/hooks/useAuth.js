@@ -1,130 +1,93 @@
 import { useState, useEffect } from "react";
+import { backendURL } from "../config";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = backendURL;
 
 export const useAuth = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const login = async (credentials) => {
+    try {
+      setLoading(true);
+      setError(null);
 
+      const response = await axios.post(`${API_URL}/login`, credentials, {
+        withCredentials: true,
+      });
 
-    const login = async (credentials) => {
+      const data = response.data;
 
-        try {
+      // Guardar usuario
+      setUser(data.usuario);
 
-            setLoading(true);
-            setError(null);
+      // Guardar token si existe
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
-            const response = await axios.post(
-                `${API_URL}/login`,
-                credentials,
-                {
-                    withCredentials: true
-                }
-            );
+      // Guardar usuario en localStorage
+      localStorage.setItem("usuario", JSON.stringify(data.usuario));
 
-            const data = response.data;
+      setIsAuthenticated(true);
 
-            // Guardar usuario
-            setUser(data.usuario);
+      return {
+        success: true,
+        usuario: data.usuario,
+      };
+    } catch (err) {
+      console.error(err);
 
-            // Guardar token si existe
-            if (data.token) {
-                localStorage.setItem("token", data.token);
-            }
+      setError(err.response?.data?.message || "Error al iniciar sesión");
 
-            // Guardar usuario en localStorage
-            localStorage.setItem(
-                "usuario",
-                JSON.stringify(data.usuario)
-            );
+      setIsAuthenticated(false);
 
-            setIsAuthenticated(true);
+      return {
+        success: false,
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            return {
-                success: true,
-                usuario: data.usuario
-            };
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
 
-        } catch (err) {
+    setUser(null);
+    setIsAuthenticated(false);
+  };
 
-            console.error(err);
+  useEffect(() => {
+    const verificarSesion = () => {
+      const usuarioGuardado = localStorage.getItem("usuario");
 
-            setError(
-                err.response?.data?.message ||
-                "Error al iniciar sesión"
-            );
+      const token = localStorage.getItem("token");
 
-            setIsAuthenticated(false);
-
-            return {
-                success: false
-            };
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
-
-    const logout = () => {
-
-        localStorage.removeItem("token");
-        localStorage.removeItem("usuario");
-
+      if (usuarioGuardado && token) {
+        setUser(JSON.parse(usuarioGuardado));
+        setIsAuthenticated(true);
+      } else {
         setUser(null);
         setIsAuthenticated(false);
-
+      }
     };
 
+    verificarSesion();
+  }, []);
 
-    const verificarSesion = () => {
+  return {
+    // estados
+    user,
+    loading,
+    error,
+    isAuthenticated,
 
-        const usuarioGuardado =
-            localStorage.getItem("usuario");
-
-        const token =
-            localStorage.getItem("token");
-
-        if (usuarioGuardado && token) {
-
-            setUser(JSON.parse(usuarioGuardado));
-            setIsAuthenticated(true);
-
-        } else {
-
-            setUser(null);
-            setIsAuthenticated(false);
-
-        }
-
-    };
-
-
-    useEffect(() => {
-
-        verificarSesion();
-
-    }, []);
-
-    return {
-
-        // estados
-        user,
-        loading,
-        error,
-        isAuthenticated,
-
-        // funciones
-        login,
-        logout,
-        verificarSesion
-
-    };
-
+    // funciones
+    login,
+    logout
+  };
 };

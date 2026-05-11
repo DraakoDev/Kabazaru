@@ -13,7 +13,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<CrearCuenta />} />
 
-        <Route element={<MainLayout />}>
+        <Route path="/" element={<MainLayout />}>
           <Route
             path="/vendedor"
             element={<VistaVendedor />}
