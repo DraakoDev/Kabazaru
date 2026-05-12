@@ -35,8 +35,11 @@ export const logearUsuario = async (req, res) => {
   }
 }
 
-export const vercookie = (req, res) => {
-  console.log(req.session)
-  if (req.session.user === null) return res.status(401).send({ session: 'non-active' })
-  res.status(200).send({ session: 'active' })
+export const checkAuth = (req, res) => {
+  if (req.session.user === null) return res.status(401).send({ session: false })
+  res.status(200).send({ session: true, user: req.session.user })
+}
+
+export const logout = (req, res) => {
+  res.clearCookie('access_token').send({ logout: true })
 }

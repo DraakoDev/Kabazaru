@@ -46,6 +46,13 @@ CREATE TABLE persona (
     correo VARCHAR(100) NOT NULL UNIQUE
 );
 
+CREATE TABLE cliente (
+    cedula VARCHAR(20) NOT NULL PRIMARY KEY,
+    cantidad_compras INT DEFAULT 0,
+    CONSTRAINT fk_cliente_persona
+        FOREIGN KEY (cedula) REFERENCES persona(cedula)
+);
+
 CREATE TABLE vendedor (
     cedula VARCHAR(20) NOT NULL PRIMARY KEY,
     registro_empresa_nit VARCHAR(20) NOT NULL,
@@ -56,14 +63,14 @@ CREATE TABLE vendedor (
 );
 
 CREATE TABLE usuario (
-    cedula VARCHAR(20) NOT NULL PRIMARY KEY,
-    nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
+    nombre_usuario VARCHAR(50) PRIMARY KEY,
     contrasena VARCHAR(100) NOT NULL,
+    cedula VARCHAR(20) NOT NULL,
     tipo VARCHAR(20) NOT NULL,
-    CONSTRAINT fk_usuario_persona
+    CONSTRAINT fk_usuario_persona 
         FOREIGN KEY (cedula) REFERENCES persona(cedula),
     CONSTRAINT chk_usuario_tipo
-        CHECK (tipo IN ('ADMIN', 'VENDEDOR', 'CLIENTE'))
+        CHECK (tipo IN ('admin', 'vendedor', 'cliente'))
 );
 
 CREATE TABLE marca (

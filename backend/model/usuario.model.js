@@ -1,5 +1,5 @@
 import { pool } from '../db/conexion.js'
-import { INSERTAR_PERSONA } from '../db/queries/persona.queries.js'
+import { BUSCAR_PERSONA, INSERTAR_PERSONA } from '../db/queries/persona.queries.js'
 import { INSERTAR_USUARIO, SELECCIONAR_USUARIO } from '../db/queries/user.queries.js'
 import bcrypt from 'bcrypt'
 
@@ -33,6 +33,10 @@ export const crearPersona = async (conexion, persona) => {
   ])
 }
 
+export const buscarPersona = async (conexion, cedula) => {
+  return await conexion.query(BUSCAR_PERSONA, cedula)
+}
+
 export const crearUsuario = async (persona) => {
   let conexion
 
@@ -41,15 +45,20 @@ export const crearUsuario = async (persona) => {
 
     await conexion.beginTransaction()
 
-    await crearPersona(conexion, persona)
+    const isCreated = await buscarPersona(conexion, persona.cedula)
+
+    if (!isCreated[0]) {
+      console.log('Creando Persona...')
+      await crearPersona(conexion, persona)
+    }
 
     const hashedPassword = await bcrypt.hash(persona.password, 8)
 
     await conexion.query(INSERTAR_USUARIO, [
-      persona.cedula,
       persona.username,
       hashedPassword,
-      persona.tipo_usuario.toUpperCase()
+      persona.cedula,
+      persona.tipo_usuario
     ])
 
     await conexion.commit()
@@ -61,8 +70,6 @@ export const crearUsuario = async (persona) => {
     if (conexion) await conexion.rollback()
 
     if (error.code === 'ER_DUP_ENTRY') {
-      if (error.message.includes('PRIMARY')) throw new Error('Ya hay un usuario registrado con ese numero de cedula')
-
       if (error.message.includes('correo')) throw new Error('Ya existe un usuario registrado con ese correo electronico')
 
       if (error.message.includes('nombre_usuario')) throw new Error('Ya existe un usuario registrado con ese nombre de usuario')
