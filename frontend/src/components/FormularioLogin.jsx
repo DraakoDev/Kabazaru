@@ -1,16 +1,21 @@
 import Swal from "sweetalert2";
+import { useContext } from "react";
+import { useNavigate } from "react-router";
+import { AuthContext } from "../context/contextos";
 import { useState } from "react";
 import passkey from "../assets/passkey.svg";
 import arroba from "../assets/arroba.svg";
 import { Link } from "react-router";
+import { backendURL } from "../config";
 
 export const FormularioLogin = () => {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
-
+  const { verificarSesion } = useContext(AuthContext);
+  let navigate = useNavigate();
   const submitData = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(`${backendURL}/login`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -19,13 +24,15 @@ export const FormularioLogin = () => {
         body: JSON.stringify(loginData),
       });
       const data = await response.json();
-      console.log(data);
       if (!data.success) {
         Swal.fire({
           title: "Error",
           text: data.error,
           icon: "warning",
         });
+      } else {
+        verificarSesion();
+        navigate(`/${data.usuario.tipo.toLowerCase()}`);
       }
     } catch (error) {
       Swal.fire({
@@ -43,66 +50,227 @@ export const FormularioLogin = () => {
   };
 
   return (
-    <div className="rounded-2xl w-2xl p-8 shadow-2xl z-10 bg-white m-6">
-      <h2 className="text-center font-bold text-4xl mb-2">Inicio de Sesion</h2>
-      <span className="block text-center mb-8">Accede a toda la coleccion</span>
-      <form onSubmit={submitData} id="formulario_registro">
-        <fieldset className="mt-4">
+    <div
+      className="
+    min-h-screen
+    gradient-bg
+    flex
+    items-center
+    justify-center
+    p-6
+  "
+    >
+      <div
+        className="
+      glass
+      w-full
+      max-w-md
+      rounded-[32px]
+      p-10
+      shadow-2xl
+      border
+      border-white/30
+    "
+      >
+        {/* HEADER */}
+
+        <div className="text-center mb-10">
+          <h2
+            className="
+          text-5xl
+          font-black
+          text-slate-800
+        "
+          >
+            Zaru
+          </h2>
+
+          <p
+            className="
+          text-slate-500
+          mt-4
+          text-lg
+        "
+          >
+            Accede a toda la colección
+          </p>
+        </div>
+
+        {/* FORM */}
+
+        <form
+          onSubmit={submitData}
+          id="formulario_registro"
+          className="space-y-6"
+        >
+          {/* USERNAME */}
+
           <div>
-            <div className="w-full">
-              <label htmlFor="username">Nombre de usuario</label>
-              <div className="relative">
-                <img
-                  src={arroba}
-                  className="absolute left-3 top-1/2 -translate-y-1/2"
-                />
-                <input
-                  id="username"
-                  className="w-full h-11 pl-10 pr-4 rounded-lg bg-white border border-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
-                  name="username"
-                  placeholder="Usuario"
-                  type="text"
-                  onChange={change}
-                  value={loginData.username}
-                  required
-                />
-              </div>
-            </div>
-            <div className="w-full mt-6">
-              <label htmlFor="password">Contraseña</label>
-              <div className="relative">
-                <img
-                  src={passkey}
-                  className="absolute left-3 top-1/2 -translate-y-1/2"
-                />
-                <input
-                  id="password"
-                  className="w-full h-11 pl-10 pr-4 rounded-lg bg-white border border-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
-                  name="password"
-                  placeholder="Contraseña"
-                  type="password"
-                  onChange={change}
-                  value={loginData.password}
-                  required
-                />
-              </div>
+            <label
+              htmlFor="username"
+              className="
+              block
+              text-sm
+              font-semibold
+              text-slate-700
+              mb-2
+            "
+            >
+              Nombre de usuario
+            </label>
+
+            <div className="relative">
+              <img
+                src={arroba}
+                className="
+                absolute
+                left-4
+                top-1/2
+                -translate-y-1/2
+                w-5
+                opacity-60
+              "
+              />
+
+              <input
+                id="username"
+                className="
+                w-full
+                bg-white/80
+                border
+                border-slate-200
+                rounded-2xl
+                pl-12
+                pr-4
+                py-4
+                text-slate-700
+                placeholder:text-slate-400
+                outline-none
+                transition-all
+                duration-300
+                focus:border-orange-400
+                focus:ring-4
+                focus:ring-orange-100
+              "
+                name="username"
+                placeholder="Ingresa tu usuario"
+                type="text"
+                onChange={change}
+                value={loginData.username}
+                required
+              />
             </div>
           </div>
-        </fieldset>
-        <div>
-          <input
-            className="w-full h-11 rounded-lg mt-6 text-white bg-amber-500 font-semibold hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all shadow-lg shadow-amber-500/50 hover:cursor-pointer"
-            value="Registrarse"
+
+          {/* PASSWORD */}
+
+          <div>
+            <label
+              htmlFor="password"
+              className="
+              block
+              text-sm
+              font-semibold
+              text-slate-700
+              mb-2
+            "
+            >
+              Contraseña
+            </label>
+
+            <div className="relative">
+              <img
+                src={passkey}
+                className="
+                absolute
+                left-4
+                top-1/2
+                -translate-y-1/2
+                w-5
+                opacity-60
+              "
+              />
+
+              <input
+                id="password"
+                className="
+                w-full
+                bg-white/80
+                border
+                border-slate-200
+                rounded-2xl
+                pl-12
+                pr-4
+                py-4
+                text-slate-700
+                placeholder:text-slate-400
+                outline-none
+                transition-all
+                duration-300
+                focus:border-orange-400
+                focus:ring-4
+                focus:ring-orange-100
+              "
+                name="password"
+                placeholder="Ingresa tu contraseña"
+                type="password"
+                onChange={change}
+                value={loginData.password}
+                required
+              />
+            </div>
+          </div>
+
+          {/* BOTON */}
+
+          <button
+            className="
+            w-full
+            py-4
+            rounded-2xl
+            bg-orange-500
+            hover:bg-orange-600
+            text-white
+            font-bold
+            text-lg
+            transition-all
+            duration-300
+            shadow-lg
+            shadow-orange-500/30
+            hover:scale-[1.02]
+            active:scale-[0.99]
+            cursor-pointer
+          "
             type="submit"
-          />
+          >
+            Iniciar sesión
+          </button>
+        </form>
+
+        {/* FOOTER */}
+
+        <div
+          className="
+        text-center
+        mt-8
+        text-slate-500
+      "
+        >
+          ¿No tienes una cuenta?
+          <Link
+            to="/registro"
+            className="
+            text-orange-500
+            font-semibold
+            ml-2
+            hover:text-orange-600
+            transition
+          "
+          >
+            Crear cuenta
+          </Link>
         </div>
-      </form>
-      <span className="block text-center mt-8">
-        No tienes una cuenta?{" "}
-        <Link to="/registro" className="text-amber-600">
-          Crea una cuenta
-        </Link>
-      </span>
+      </div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ export const Cabezera = () => {
           <figure className="w-24 p-0 m-0">
             <img src={logo} alt="Logo" />
           </figure>
-          <h1 className=" text-4xl text-amber-50 font-bold italic">Kabazaru</h1>
+          <h1 className=" text-4xl text-amber-50 font-bold italic">Zaru</h1>
         </div>
         <div>
           <button className="bg-blue-500 rounded-2xl p-4 min-h-3 hover:bg-blue-900 hover:cursor-pointer">
