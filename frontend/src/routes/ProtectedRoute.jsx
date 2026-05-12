@@ -1,44 +1,25 @@
 import { Navigate } from "react-router";
+import { AuthContext } from "../context/contextos.js";
+import { useContext } from "react";
 
-import { useAuth }
-from "../hooks/useAuth";
-
-export const ProtectedRoute = ({
-  children,
-  role,
-}) => {
-
-  const {
-    user,
-    loading,
-    isAuthenticated,
-  } = useAuth();
+export const ProtectedRoute = ({ children, tipo }) => {
+  const { user, isAuthenticated, loading } = useContext(AuthContext);
 
   if (loading) {
-
     return (
-      <h1>Cargando...</h1>
+      <div className="min-h-screen flex items-center justify-center">
+        Cargando...
+      </div>
     );
-
   }
 
   if (!isAuthenticated) {
-
-    return (
-      <Navigate to="/login" />
-    );
-
+    return <Navigate to="/login" replace />;
   }
 
-  if (
-    role &&
-    user.tipo_usuario !== role
-  ) {
-
-    return (
-      <Navigate to="/login" />
-    );
-
+  if (user.tipo !== tipo) {
+    console.log("Los tipos no coinciden");
+    return <Navigate to="/login" replace />;
   }
 
   return children;

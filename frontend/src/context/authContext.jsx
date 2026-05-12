@@ -1,123 +1,74 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-} from "react";
+import { useState, useEffect } from "react";
+import { backendURL } from "../config.js";
+import { AuthContext } from "./contextos.js";
+import Cookies from "js-cookie";
 
-import axios from "axios";
-
-const API_URL = "http://localhost:3000";
-
-export const AuthContext =
-  createContext();
-
-export const AuthProvider = ({
-  children,
-}) => {
-
-  const [user, setUser] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [isAuthenticated,
-    setIsAuthenticated] =
-    useState(false);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const verificarSesion = async () => {
-
+    setLoading(true);
+    console.log("Verificando Sesion...");
     try {
+      const token = Cookies.get("access_token");
 
-      const token =
-        localStorage.getItem("token");
+      const response = await fetch(`${backendURL}/getAuth`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token,
+        }),
+      });
 
-      const usuario =
-        localStorage.getItem("usuario");
-
-      if (token && usuario) {
-
-        setUser(JSON.parse(usuario));
-
-        setIsAuthenticated(true);
-
-      }
-
+      const data = await response.json();
+      setIsAuthenticated(Boolean(data.session));
+      setUser(data.user || null);
     } catch (error) {
-
-      console.log(error);
-
-      setUser(null);
-
+      console.log("No fue posible solicitar acceso", error.message);
       setIsAuthenticated(false);
-
+      setUser(null);
     } finally {
-
       setLoading(false);
-
     }
   };
 
   useEffect(() => {
-
     verificarSesion();
-
   }, []);
 
-  const login = async (credentials) => {
+  const logout = async () => {
+    try {
+      const response = await fetch(`${backendURL}/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
 
-    const response = await axios.post(
-      `${API_URL}/login`,
-      credentials,
-      {
-        withCredentials: true,
-      }
-    );
+      const data = await response.json();
+      console.log(data);
 
-    const data = response.data;
-
-    localStorage.setItem(
-      "token",
-      data.token
-    );
-
-    localStorage.setItem(
-      "usuario",
-      JSON.stringify(data.usuario)
-    );
-
-    setUser(data.usuario);
-
-    setIsAuthenticated(true);
-
-    return data;
-  };
-
-  const logout = () => {
-
-    localStorage.removeItem("token");
-
-    localStorage.removeItem("usuario");
-
-    setUser(null);
-
-    setIsAuthenticated(false);
+      setIsAuthenticated(false);
+      setUser(null);
+    } catch (error) {
+      console.log("Error cerrando la sesión", error.message);
+    }
   };
 
   return (
-
     <AuthContext.Provider
       value={{
         user,
-        loading,
         isAuthenticated,
-        login,
+        loading,
         logout,
+        verificarSesion,
       }}
     >
-
       {children}
-
     </AuthContext.Provider>
   );
 };

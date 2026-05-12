@@ -1,112 +1,56 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router";
-
-import {GestionUsuarios,} 
-from "./pages/admin/GestionUsuarios";
-
-import { CrearCuenta }
-from "./pages/CrearCuenta";
-
-import { LoginPage }
-from "./pages/LoginPage";
-
-import { VistaCliente }
-from "./pages/VistaCliente";
-
-import { VistaVendedor }
-from "./pages/VistaVendedor";
-
-import { ProtectedRoute }
-from "./routes/ProtectedRoute";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { GestionUsuarios } from "./pages/admin/GestionUsuarios.jsx";
+import { CrearCuenta } from "./pages/CrearCuenta.jsx";
+import { LoginPage } from "./pages/LoginPage.jsx";
+import { VistaCliente } from "./pages/VistaCliente.jsx";
+import { VistaVendedor } from "./pages/VistaVendedor.jsx";
+import { ProtectedRoute } from "./routes/ProtectedRoute.jsx";
+import { AuthProvider } from "./context/authContext.jsx";
 
 function App() {
-
   return (
-
     <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* PUBLICAS */}
 
-      <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/registro" element={<CrearCuenta />} />
 
-        {/* PUBLICAS */}
+          {/* PRIVADAS */}
 
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
+          <Route
+            path="/cliente"
+            element={
+              <ProtectedRoute tipo="cliente">
+                <VistaCliente />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute tipo="admin">
+                <GestionUsuarios />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/vendedor"
+            element={
+              <ProtectedRoute tipo="vendedor">
+                <VistaVendedor />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/registro"
-          element={<CrearCuenta />}
-        />
+          {/* REDIRECT */}
 
-        {/* PRIVADAS */}
-
-        <Route
-          path="/cliente"
-
-          element={
-
-            <ProtectedRoute
-              role="cliente"
-            >
-
-              <VistaCliente />
-
-            </ProtectedRoute>
-
-          }
-        />
-         <Route
-          path="/gestion-usuarios"
-
-          element={
-
-            <ProtectedRoute>
-
-              <GestionUsuarios />
-
-            </ProtectedRoute>
-
-          }
-        />
-        <Route
-          path="/vendedor"
-
-          element={
-
-            <ProtectedRoute
-              role="vendedor"
-            >
-
-              <VistaVendedor />
-
-            </ProtectedRoute>
-
-          }
-        />
-
-        {/* REDIRECT */}
-
-        <Route
-          path="*"
-          element={
-            <Navigate to="/login" />
-          }
-        />
-
-      </Routes>
-
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
-
-    
   );
-
-  
 }
 
 export default App;
-
