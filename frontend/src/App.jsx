@@ -1,27 +1,112 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router";
 
-import { LoginPage } from "./pages/LoginPage";
-import { CrearCuenta } from "./pages/CrearCuenta";
-import { VistaVendedor } from "./pages/VistaVendedor";
+import {GestionUsuarios,} 
+from "./pages/admin/GestionUsuarios";
 
-import { MainLayout } from "./layouts/MainLayout";
+import { CrearCuenta }
+from "./pages/CrearCuenta";
+
+import { LoginPage }
+from "./pages/LoginPage";
+
+import { VistaCliente }
+from "./pages/VistaCliente";
+
+import { VistaVendedor }
+from "./pages/VistaVendedor";
+
+import { ProtectedRoute }
+from "./routes/ProtectedRoute";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/registro" element={<CrearCuenta />} />
 
-        <Route path="/" element={<MainLayout />}>
-          <Route
-            path="/vendedor"
-            element={<VistaVendedor />}
-          />
-        </Route>
+  return (
+
+    <BrowserRouter>
+
+      <Routes>
+
+        {/* PUBLICAS */}
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        <Route
+          path="/registro"
+          element={<CrearCuenta />}
+        />
+
+        {/* PRIVADAS */}
+
+        <Route
+          path="/cliente"
+
+          element={
+
+            <ProtectedRoute
+              role="cliente"
+            >
+
+              <VistaCliente />
+
+            </ProtectedRoute>
+
+          }
+        />
+         <Route
+          path="/gestion-usuarios"
+
+          element={
+
+            <ProtectedRoute>
+
+              <GestionUsuarios />
+
+            </ProtectedRoute>
+
+          }
+        />
+        <Route
+          path="/vendedor"
+
+          element={
+
+            <ProtectedRoute
+              role="vendedor"
+            >
+
+              <VistaVendedor />
+
+            </ProtectedRoute>
+
+          }
+        />
+
+        {/* REDIRECT */}
+
+        <Route
+          path="*"
+          element={
+            <Navigate to="/login" />
+          }
+        />
+
       </Routes>
+
     </BrowserRouter>
+
+    
   );
+
+  
 }
 
 export default App;
+

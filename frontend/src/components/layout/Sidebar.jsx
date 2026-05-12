@@ -12,7 +12,7 @@ export const Sidebar = () => {
       <div>
         <div className="mb-10">
           <h1 className="text-3xl font-black text-orange-400">
-            Kabazaru
+            Zaru
           </h1>
 
           <p className="text-slate-400 mt-2 text-sm">
@@ -25,6 +25,23 @@ export const Sidebar = () => {
             <LayoutDashboard size={20} />
             Dashboard
           </button>
+
+        <NavLink
+  to="/gestion-usuarios"
+
+  className="
+    flex
+    items-center
+    gap-3
+    px-4
+    py-3
+    rounded-2xl
+    hover:bg-orange-100
+    transition
+  "
+>
+  Gestión Usuarios
+</NavLink>
 
           <button className="flex items-center gap-3 w-full px-4 py-3 rounded-2xl hover:bg-slate-800 transition">
             <Car size={20} />
