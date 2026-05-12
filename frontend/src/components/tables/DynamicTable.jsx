@@ -3,6 +3,24 @@ export const DynamicTable = ({
   data,
 }) => {
 
+  const handleView = (item) => {
+
+    console.log("Ver:", item);
+
+  };
+
+  const handleEdit = (item) => {
+
+    console.log("Editar:", item);
+
+  };
+
+  const handleDelete = (item) => {
+
+    console.log("Eliminar:", item);
+
+  };
+
   return (
 
     <div className="
@@ -14,6 +32,8 @@ export const DynamicTable = ({
         w-full
         border-collapse
       ">
+
+        {/* HEADER */}
 
         <thead>
 
@@ -39,9 +59,22 @@ export const DynamicTable = ({
 
             ))}
 
+            {/* NUEVA COLUMNA */}
+
+            <th className="
+              text-left
+              px-6
+              py-4
+              font-bold
+            ">
+              Acciones
+            </th>
+
           </tr>
 
         </thead>
+
+        {/* BODY */}
 
         <tbody>
 
@@ -58,6 +91,8 @@ export const DynamicTable = ({
               "
             >
 
+              {/* DATOS */}
+
               {columns.map((col) => (
 
                 <td
@@ -73,6 +108,88 @@ export const DynamicTable = ({
                 </td>
 
               ))}
+
+              {/* BOTONES */}
+
+              <td className="
+                px-6
+                py-4
+              ">
+
+                <div className="
+                  flex
+                  gap-3
+                ">
+
+                  {/* VER */}
+
+                  <button
+                    onClick={() =>
+                      handleView(item)
+                    }
+
+                    className="
+                      px-4
+                      py-2
+                      rounded-xl
+                      bg-blue-500
+                      hover:bg-blue-600
+                      text-white
+                      text-sm
+                      font-semibold
+                      transition
+                    "
+                  >
+                    Ver
+                  </button>
+
+                  {/* EDITAR */}
+
+                  <button
+                    onClick={() =>
+                      handleEdit(item)
+                    }
+
+                    className="
+                      px-4
+                      py-2
+                      rounded-xl
+                      bg-amber-500
+                      hover:bg-amber-600
+                      text-white
+                      text-sm
+                      font-semibold
+                      transition
+                    "
+                  >
+                    Editar
+                  </button>
+
+                  {/* ELIMINAR */}
+
+                  <button
+                    onClick={() =>
+                      handleDelete(item)
+                    }
+
+                    className="
+                      px-4
+                      py-2
+                      rounded-xl
+                      bg-red-500
+                      hover:bg-red-600
+                      text-white
+                      text-sm
+                      font-semibold
+                      transition
+                    "
+                  >
+                    Eliminar
+                  </button>
+
+                </div>
+
+              </td>
 
             </tr>
 
