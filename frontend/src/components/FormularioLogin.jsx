@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/contextos";
@@ -50,227 +49,315 @@ export const FormularioLogin = () => {
   };
 
   return (
+  <div
+    className="
+      min-h-screen
+      flex
+      items-center
+      justify-center
+      px-6
+      py-10
+      bg-[#09090b]
+      relative
+      overflow-hidden
+    "
+  >
+
+    {/* FONDOS */}
+
     <div
       className="
-    min-h-screen
-    gradient-bg
-    flex
-    items-center
-    justify-center
-    p-6
-  "
+        absolute
+        w-[500px]
+        h-[500px]
+        bg-orange-500/10
+        blur-3xl
+        rounded-full
+        -top-40
+        -left-40
+      "
+    />
+
+    <div
+      className="
+        absolute
+        w-[400px]
+        h-[400px]
+        bg-purple-500/10
+        blur-3xl
+        rounded-full
+        bottom-0
+        right-0
+      "
+    />
+
+    {/* CARD */}
+
+    <div
+      className="
+        relative
+        w-full
+        max-w-md
+        bg-white/[0.03]
+        backdrop-blur-2xl
+        border
+        border-white/10
+        rounded-[32px]
+        p-10
+        shadow-[0_0_60px_rgba(0,0,0,.45)]
+      "
     >
-      <div
-        className="
-      glass
-      w-full
-      max-w-md
-      rounded-[32px]
-      p-10
-      shadow-2xl
-      border
-      border-white/30
-    "
+
+      {/* LOGO */}
+
+      <div className="text-center mb-10">
+
+        <h1
+          className="
+            text-5xl
+            font-black
+            tracking-tight
+            text-white
+          "
+        >
+          Zaru
+        </h1>
+
+        <p
+          className="
+            text-zinc-400
+            mt-4
+            text-sm
+            leading-relaxed
+          "
+        >
+          Bienvenido de nuevo.
+          <br />
+          Inicia sesión para continuar.
+        </p>
+
+      </div>
+
+      {/* FORM */}
+
+      <form
+        onSubmit={submitData}
+        className="space-y-6"
       >
-        {/* HEADER */}
 
-        <div className="text-center mb-10">
-          <h2
-            className="
-          text-5xl
-          font-black
-          text-slate-800
-        "
-          >
-            Zaru
-          </h2>
+        {/* USERNAME */}
 
-          <p
+        <div>
+
+          <label
+            htmlFor="username"
             className="
-          text-slate-500
-          mt-4
-          text-lg
-        "
+              block
+              text-sm
+              text-zinc-300
+              mb-3
+              font-medium
+            "
           >
-            Accede a toda la colección
-          </p>
+            Usuario
+          </label>
+
+          <div className="relative">
+
+            <img
+              src={arroba}
+              className="
+                absolute
+                left-4
+                top-1/2
+                -translate-y-1/2
+                w-5
+                opacity-40
+                invert
+              "
+            />
+
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Ingresa tu usuario"
+              onChange={change}
+              value={loginData.username}
+              required
+
+              className="
+                w-full
+                h-14
+                bg-white/[0.04]
+                border
+                border-white/10
+                rounded-2xl
+                pl-12
+                pr-4
+                text-white
+                placeholder:text-zinc-500
+                outline-none
+                transition-all
+                duration-300
+
+                focus:border-orange-500
+                focus:bg-white/[0.06]
+                focus:ring-4
+                focus:ring-orange-500/10
+              "
+            />
+
+          </div>
+
         </div>
 
-        {/* FORM */}
+        {/* PASSWORD */}
 
-        <form
-          onSubmit={submitData}
-          id="formulario_registro"
-          className="space-y-6"
-        >
-          {/* USERNAME */}
+        <div>
 
-          <div>
-            <label
-              htmlFor="username"
-              className="
-              block
-              text-sm
-              font-semibold
-              text-slate-700
-              mb-2
-            "
-            >
-              Nombre de usuario
-            </label>
-
-            <div className="relative">
-              <img
-                src={arroba}
-                className="
-                absolute
-                left-4
-                top-1/2
-                -translate-y-1/2
-                w-5
-                opacity-60
-              "
-              />
-
-              <input
-                id="username"
-                className="
-                w-full
-                bg-white/80
-                border
-                border-slate-200
-                rounded-2xl
-                pl-12
-                pr-4
-                py-4
-                text-slate-700
-                placeholder:text-slate-400
-                outline-none
-                transition-all
-                duration-300
-                focus:border-orange-400
-                focus:ring-4
-                focus:ring-orange-100
-              "
-                name="username"
-                placeholder="Ingresa tu usuario"
-                type="text"
-                onChange={change}
-                value={loginData.username}
-                required
-              />
-            </div>
-          </div>
-
-          {/* PASSWORD */}
-
-          <div>
-            <label
-              htmlFor="password"
-              className="
-              block
-              text-sm
-              font-semibold
-              text-slate-700
-              mb-2
-            "
-            >
-              Contraseña
-            </label>
-
-            <div className="relative">
-              <img
-                src={passkey}
-                className="
-                absolute
-                left-4
-                top-1/2
-                -translate-y-1/2
-                w-5
-                opacity-60
-              "
-              />
-
-              <input
-                id="password"
-                className="
-                w-full
-                bg-white/80
-                border
-                border-slate-200
-                rounded-2xl
-                pl-12
-                pr-4
-                py-4
-                text-slate-700
-                placeholder:text-slate-400
-                outline-none
-                transition-all
-                duration-300
-                focus:border-orange-400
-                focus:ring-4
-                focus:ring-orange-100
-              "
-                name="password"
-                placeholder="Ingresa tu contraseña"
-                type="password"
-                onChange={change}
-                value={loginData.password}
-                required
-              />
-            </div>
-          </div>
-
-          {/* BOTON */}
-
-          <button
+          <label
+            htmlFor="password"
             className="
+              block
+              text-sm
+              text-zinc-300
+              mb-3
+              font-medium
+            "
+          >
+            Contraseña
+          </label>
+
+          <div className="relative">
+
+            <img
+              src={passkey}
+              className="
+                absolute
+                left-4
+                top-1/2
+                -translate-y-1/2
+                w-5
+                opacity-40
+                invert
+              "
+            />
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Ingresa tu contraseña"
+              onChange={change}
+              value={loginData.password}
+              required
+
+              className="
+                w-full
+                h-14
+                bg-white/[0.04]
+                border
+                border-white/10
+                rounded-2xl
+                pl-12
+                pr-4
+                text-white
+                placeholder:text-zinc-500
+                outline-none
+                transition-all
+                duration-300
+
+                focus:border-orange-500
+                focus:bg-white/[0.06]
+                focus:ring-4
+                focus:ring-orange-500/10
+              "
+            />
+
+          </div>
+
+        </div>
+
+        {/* BUTTON */}
+
+        <button
+          type="submit"
+
+          className="
             w-full
-            py-4
+            h-14
             rounded-2xl
             bg-orange-500
-            hover:bg-orange-600
+            hover:bg-orange-400
             text-white
             font-bold
-            text-lg
             transition-all
             duration-300
-            shadow-lg
-            shadow-orange-500/30
-            hover:scale-[1.02]
-            active:scale-[0.99]
+            hover:scale-[1.01]
+            active:scale-[0.98]
+            shadow-[0_10px_30px_rgba(249,115,22,.35)]
             cursor-pointer
           "
-            type="submit"
-          >
-            Iniciar sesión
-          </button>
-        </form>
-
-        {/* FOOTER */}
-
-        <div
-          className="
-        text-center
-        mt-8
-        text-slate-500
-      "
         >
-          ¿No tienes una cuenta?
-          <Link
-            to="/registro"
-            className="
-            text-orange-500
-            font-semibold
-            ml-2
-            hover:text-orange-600
+          Iniciar sesión
+        </button>
+
+{/* RECUPERAR CONTRASEÑA */}
+
+<div className="flex justify-end">
+
+  <Link
+    to="/recuperar-password"
+
+    className="
+      text-sm
+      text-zinc-400
+      hover:text-orange-400
+      transition-all
+      duration-300
+    "
+  >
+    ¿Olvidaste tu contraseña?
+  </Link>
+
+</div>
+
+      </form>
+      
+
+
+      {/* FOOTER */}
+
+      <div
+        className="
+          mt-8
+          text-center
+          text-zinc-500
+          text-sm
+        "
+      >
+
+        ¿No tienes cuenta?
+
+        <Link
+          to="/registro"
+
+          className="
+            text-orange-400
+            hover:text-orange-300
             transition
+            ml-2
+            font-semibold
           "
-          >
-            Crear cuenta
-          </Link>
-        </div>
+        >
+          Crear cuenta
+        </Link>
+
       </div>
+
     </div>
-  );
+
+  </div>
+);
 };

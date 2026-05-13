@@ -198,7 +198,7 @@ export const DynamicTable = ({
         </tbody>
 
       </table>
-
+        
     </div>
   );
 };
