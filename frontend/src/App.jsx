@@ -6,6 +6,8 @@ import { VistaCliente } from "./pages/VistaCliente.jsx";
 import { VistaVendedor } from "./pages/VistaVendedor.jsx";
 import { ProtectedRoute } from "./routes/ProtectedRoute.jsx";
 import { AuthProvider } from "./context/authContext.jsx";
+import { RecuperacionPage } from "./pages/RecuperacionPage";
+import { CambioContraPage } from "./pages/CambioContraPage";
 
 function App() {
   return (
@@ -16,7 +18,10 @@ function App() {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registro" element={<CrearCuenta />} />
+          <Route path="/recover-password"  element={<RecuperacionPage />}/> 
+          <Route path="/cambiar-password" element={<CambioContraPage />}/>
 
+           
           {/* PRIVADAS */}
 
           <Route

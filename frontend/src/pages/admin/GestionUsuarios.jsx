@@ -2,7 +2,7 @@ import {
   useEffect,
   useState,
 } from "react";
-
+import { BotonLogout } from "../../components/BotonLogout.jsx";
 import {
   getPersonas,
   getUsuarios,
@@ -112,155 +112,392 @@ export const GestionUsuarios = () => {
 
   const vendedorColumns = [
 
-    {
-      key: "persona",
-      label: "Persona",
+   {
+      key: "cedula",
+      label: "Cédula",
     },
 
     {
-      key: "registro_empresa",
-      label: "Registro Empresa",
+      key: "nombre",
+      label: "Nombre",
+    },
+
+    {
+      key: "apellido",
+      label: "Apellido",
+    },
+
+    {
+      key: "direccion",
+      label: "Dirección",
+    },
+
+    {
+      key: "telefono",
+      label: "Teléfono",
+    },
+
+    {
+      key: "correo",
+      label: "Correo",
+    },
+
+    {
+      key: "tipo",
+      label: "Tipo",
     },
   ];
 
   return (
 
-    <div className="
-      space-y-8
-      p-6
-    ">
+    <div
+      className="
+        min-h-screen
+        bg-[#09090b]
+        relative
+        overflow-hidden
+        p-8
+        text-white
+      "
+    >
 
-      {/* HEADER */}
+      {/* EFECTOS FONDO */}
 
-      <div>
+      <div
+        className="
+          absolute
+          w-[500px]
+          h-[500px]
+          bg-orange-500/10
+          blur-3xl
+          rounded-full
+          -top-40
+          -left-40
+        "
+      />
 
-        <h1 className="
-          text-4xl
-          font-black
-          text-slate-800
-        ">
-          Gestión de Usuarios
-        </h1>
+      <div
+        className="
+          absolute
+          w-[400px]
+          h-[400px]
+          bg-purple-500/10
+          blur-3xl
+          rounded-full
+          bottom-0
+          right-0
+        "
+      />
 
-        <p className="
-          text-slate-500
-          mt-2
-        ">
-          Administra personas,
-          usuarios y vendedores
-        </p>
+      {/* CONTENIDO */}
 
-      </div>
+      <div className="relative z-10 space-y-8">
 
-      {/* BOTONES */}
+        {/* HEADER */}
 
-      <div className="flex gap-4">
-
-        <button
-          onClick={() =>
-            setActive("personas")
-          }
-
-          className={`
-            px-6
-            py-3
-            rounded-2xl
-            font-semibold
-            transition
-
-            ${
-              active === "personas"
-              ? "bg-orange-500 text-white"
-              : "bg-slate-200"
-            }
-          `}
+        <section
+          className="
+            flex
+            flex-col
+            md:flex-row
+            md:items-center
+            md:justify-between
+            gap-6
+          "
         >
-          Personas
-        </button>
 
-        <button
-          onClick={() =>
-            setActive("usuarios")
-          }
+          <div>
 
-          className={`
-            px-6
-            py-3
-            rounded-2xl
-            font-semibold
-            transition
+            <h1
+              className="
+                text-5xl
+                font-black
+                tracking-tight
+                text-white
+              "
+            >
+              Gestión de Usuarios
+            </h1>
 
-            ${
-              active === "usuarios"
-              ? "bg-orange-500 text-white"
-              : "bg-slate-200"
-            }
-          `}
+            <p
+              className="
+                text-zinc-400
+                mt-3
+                text-sm
+              "
+            >
+              Administra personas, usuarios y vendedores del sistema.
+            </p>
+
+          </div>
+
+          <button
+            className="
+              h-14
+              px-8
+              rounded-2xl
+              bg-orange-500
+              hover:bg-orange-400
+              text-white
+              font-semibold
+              transition-all
+              duration-300
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              shadow-[0_10px_30px_rgba(249,115,22,.25)]
+              cursor-pointer
+            "
+          >
+            Nuevo usuario
+          </button>
+
+        </section>
+
+        {/* BOTONES */}
+
+        <section
+          className="
+            flex
+            flex-wrap
+            gap-4
+          "
         >
-          Usuarios
-        </button>
 
-        <button
-          onClick={() =>
-            setActive("vendedores")
-          }
-
-          className={`
-            px-6
-            py-3
-            rounded-2xl
-            font-semibold
-            transition
-
-            ${
-              active === "vendedores"
-              ? "bg-orange-500 text-white"
-              : "bg-slate-200"
+          <button
+            onClick={() =>
+              setActive("personas")
             }
-          `}
+
+            className={`
+              h-14
+              px-7
+              rounded-2xl
+              font-semibold
+              transition-all
+              duration-300
+              hover:scale-[1.02]
+              active:scale-[0.98]
+
+              ${
+                active === "personas"
+
+                ? `
+                  bg-orange-500
+                  text-white
+                  shadow-[0_10px_30px_rgba(249,115,22,.25)]
+                `
+
+                : `
+                  bg-[#111111]
+                  border
+                  border-white/5
+                  text-zinc-300
+                  hover:bg-white/[0.03]
+                `
+              }
+            `}
+          >
+            Personas
+          </button>
+
+          <button
+            onClick={() =>
+              setActive("usuarios")
+            }
+
+            className={`
+              h-14
+              px-7
+              rounded-2xl
+              font-semibold
+              transition-all
+              duration-300
+              hover:scale-[1.02]
+              active:scale-[0.98]
+
+              ${
+                active === "usuarios"
+
+                ? `
+                  bg-orange-500
+                  text-white
+                  shadow-[0_10px_30px_rgba(249,115,22,.25)]
+                `
+
+                : `
+                  bg-[#111111]
+                  border
+                  border-white/5
+                  text-zinc-300
+                  hover:bg-white/[0.03]
+                `
+              }
+            `}
+          >
+            Usuarios
+          </button>
+
+          <button
+            onClick={() =>
+              setActive("vendedores")
+            }
+
+            className={`
+              h-14
+              px-7
+              rounded-2xl
+              font-semibold
+              transition-all
+              duration-300
+              hover:scale-[1.02]
+              active:scale-[0.98]
+
+              ${
+                active === "vendedores"
+
+                ? `
+                  bg-orange-500
+                  text-white
+                  shadow-[0_10px_30px_rgba(249,115,22,.25)]
+                `
+
+                : `
+                  bg-[#111111]
+                  border
+                  border-white/5
+                  text-zinc-300
+                  hover:bg-white/[0.03]
+                `
+              }
+            `}
+          >
+            Vendedores
+          </button>
+
+        </section>
+
+        {/* TABLA */}
+
+        <section
+          className="
+            bg-[#111111]
+            border
+            border-white/5
+            rounded-[32px]
+            p-8
+            shadow-[0_0_40px_rgba(0,0,0,.35)]
+          "
         >
-          Vendedores
-        </button>
 
+          <div
+            className="
+              flex
+              flex-col
+              md:flex-row
+              md:items-center
+              md:justify-between
+              gap-4
+              mb-8
+            "
+          >
+
+            <div>
+
+              <h2
+                className="
+                  text-3xl
+                  font-black
+                  text-white
+                "
+              >
+                {
+                  active === "personas"
+                  ? "Listado de personas"
+
+                  : active === "usuarios"
+                  ? "Listado de usuarios"
+
+                  : "Listado de vendedores"
+                }
+              </h2>
+
+              <p className="text-zinc-500 mt-2 text-sm">
+
+                {
+                  active === "personas"
+                  ? "Consulta todas las personas registradas."
+
+                  : active === "usuarios"
+                  ? "Administra los usuarios del sistema."
+
+                  : "Consulta los vendedores registrados."
+                }
+
+              </p>
+
+            </div>
+
+            <button
+              className="
+                h-14
+                px-7
+                rounded-2xl
+                bg-orange-500
+                hover:bg-orange-400
+                text-white
+                font-semibold
+                transition-all
+                duration-300
+                hover:scale-[1.02]
+                active:scale-[0.98]
+                shadow-[0_10px_30px_rgba(249,115,22,.25)]
+              "
+            >
+              Exportar datos
+            </button>
+
+          </div>
+
+          <div
+            className="
+              overflow-x-auto
+              rounded-2xl
+            "
+          >
+
+            {active === "personas" && (
+
+              <DynamicTable
+                columns={personaColumns}
+                data={data}
+              />
+
+            )}
+
+            {active === "usuarios" && (
+
+              <DynamicTable
+                columns={usuarioColumns}
+                data={data}
+              />
+
+            )}
+
+            {active === "vendedores" && (
+
+              <DynamicTable
+                columns={vendedorColumns}
+                data={data}
+              />
+
+            )}
+
+          </div>
+
+        </section>
+          <BotonLogout />
       </div>
-
-      {/* TABLA */}
-
-      <div className="
-        glass
-        p-6
-        rounded-3xl
-      ">
-
-        {active === "personas" && (
-
-          <DynamicTable
-            columns={personaColumns}
-            data={data}
-          />
-
-        )}
-
-        {active === "usuarios" && (
-
-          <DynamicTable
-            columns={usuarioColumns}
-            data={data}
-          />
-
-        )}
-
-        {active === "vendedores" && (
-
-          <DynamicTable
-            columns={vendedorColumns}
-            data={data}
-          />
-
-        )}
-
-      </div>
-
+          
     </div>
   );
 };

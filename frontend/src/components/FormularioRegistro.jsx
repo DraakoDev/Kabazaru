@@ -31,655 +31,1005 @@ export const FormularioRegistro = () => {
   };
 
   const submitData = async (e) => {
-    e.preventDefault();
-    console.log(`${backendURL}/register`);
-    try {
-      const response = await fetch(`${backendURL}/register`, {
+
+  e.preventDefault();
+
+  const {
+    cedula,
+    nombre,
+    apellido,
+    telefono,
+    correo,
+    direccion,
+    tipo_usuario,
+    username,
+    password,
+  } = formData;
+
+  /* VALIDAR CAMPOS VACÍOS */
+
+  if (
+    !cedula ||
+    !nombre ||
+    !apellido ||
+    !telefono ||
+    !correo ||
+    !direccion ||
+    !tipo_usuario ||
+    !username ||
+    !password
+  ) {
+
+    return Swal.fire({
+      title: "Campos incompletos",
+      text: "Todos los campos son obligatorios.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  /* VALIDAR CÉDULA */
+
+  if (!/^\d+$/.test(cedula)) {
+
+    return Swal.fire({
+      title: "Cédula inválida",
+      text: "La cédula solo debe contener números.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  /* VALIDAR TELÉFONO */
+
+  if (!/^\d+$/.test(telefono)) {
+
+    return Swal.fire({
+      title: "Teléfono inválido",
+      text: "El teléfono solo debe contener números.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  if (telefono.length < 7) {
+
+    return Swal.fire({
+      title: "Teléfono inválido",
+      text: "El teléfono es demasiado corto.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  /* VALIDAR CORREO */
+
+  const emailRegex =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(correo)) {
+
+    return Swal.fire({
+      title: "Correo inválido",
+      text: "Ingresa un correo electrónico válido.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  /* VALIDAR PASSWORD */
+
+  if (password.length < 6) {
+
+    return Swal.fire({
+      title: "Contraseña insegura",
+      text: "La contraseña debe tener al menos 6 caracteres.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  /* VALIDAR USERNAME */
+
+  if (username.length < 4) {
+
+    return Swal.fire({
+      title: "Usuario inválido",
+      text: "El nombre de usuario debe tener mínimo 4 caracteres.",
+      icon: "warning",
+      confirmButtonColor: "#f97316",
+    });
+
+  }
+
+  console.log(`${backendURL}/register`);
+
+  try {
+
+    const response = await fetch(
+      `${backendURL}/register`,
+      {
         headers: {
           "Content-Type": "application/json",
         },
+
         method: "POST",
+
         body: JSON.stringify(formData),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+
+      Swal.fire({
+        title: "Usuario Registrado!",
+        text: "El registro ha sido exitoso!",
+        icon: "success",
+        confirmButtonColor: "#22c55e",
       });
 
-      const data = await response.json();
-      if (data.success) {
-        Swal.fire({
-          title: "Usuario Registrado!",
-          text: "El registro ha sido exitoso!",
-          icon: "success",
-        });
-        navigate("/login");
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: data.error,
-          icon: "warning",
-        });
-      }
-    } catch (error) {
+      navigate("/login");
+
+    } else {
+
       Swal.fire({
-        title: "(|||❛︵❛。)",
-        text: "No fue posible conectarse al servidor!",
-        icon: "error",
+        title: "Error",
+        text: data.error,
+        icon: "warning",
+        confirmButtonColor: "#f97316",
       });
-      console.log("Error enviando los datos", error);
+
     }
-  };
+
+  } catch (error) {
+
+    Swal.fire({
+      title: "(|||❛︵❛。)",
+      text: "No fue posible conectarse al servidor!",
+      icon: "error",
+      confirmButtonColor: "#ef4444",
+    });
+
+    console.log(
+      "Error enviando los datos",
+      error
+    );
+
+  }
+};
 
   return (
+  <div
+    className="
+      min-h-screen
+      flex
+      items-center
+      justify-center
+      px-6
+      py-10
+      bg-[#09090b]
+      relative
+      overflow-hidden
+    "
+  >
+
+    {/* FONDOS */}
+
     <div
       className="
-    min-h-screen
-    gradient-bg
-    flex
-    items-center
-    justify-center
-    p-6
-  "
+        absolute
+        w-[500px]
+        h-[500px]
+        bg-orange-500/5
+        blur-3xl
+        rounded-full
+        -top-40
+        -left-40
+      "
+    />
+
+    <div
+      className="
+        absolute
+        w-[400px]
+        h-[400px]
+        bg-purple-500/10
+        blur-3xl
+        rounded-full
+        bottom-0
+        right-0
+      "
+    />
+
+    {/* CARD */}
+
+    <div
+      className="
+        relative
+        w-full
+        max-w-4xl
+
+        bg-black/40
+        backdrop-blur-2xl
+
+        border
+        border-white/10
+
+        rounded-[48px]
+        p-10
+
+        shadow-[0_0_60px_rgba(0,0,0,.45)]
+      "
     >
-      <div
-        className="
-      glass
-      w-full
-      max-w-5xl
-      rounded-[32px]
-      shadow-2xl
-      border
-      border-white/30
-      p-10
-    "
-      >
-        {/* HEADER */}
 
-        <div className="text-center mb-10">
-          <h2
-            className="
-          text-5xl
-          font-black
-          text-slate-800
-        "
-          >
-            Crear Cuenta
-          </h2>
+      {/* HEADER */}
 
-          <p
-            className="
-          text-slate-500
-          mt-4
-          text-lg
-        "
-          >
-            Regístrate para acceder a toda la colección
-          </p>
-        </div>
+      <div className="text-center mb-12">
 
-        {/* FORM */}
-
-        <form
-          onSubmit={submitData}
-          id="formulario_registro"
-          className="space-y-8"
+        <h1
+          className="
+            text-5xl
+            font-black
+            tracking-tight
+            text-white
+          "
         >
-          {/* DATOS PERSONALES */}
+          Zaru
+        </h1>
 
-          <div>
-            <h3
-              className="
-            text-2xl
-            font-bold
-            text-slate-700
-            mb-6
+        <p
+          className="
+            text-zinc-400
+            mt-4
+            text-sm
+            leading-relaxed
           "
-            >
-              Información personal
-            </h3>
+        >
+          Crea una cuenta para continuar.
+        </p>
 
-            <div
-              className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            gap-6
-          "
-            >
-              {/* CEDULA */}
+      </div>
 
-              <div>
-                <label
-                  htmlFor="cedula"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Cédula
-                </label>
+      {/* FORM */}
 
-                <div className="relative">
-                  <img
-                    src={id_card}
-                    className="
+      <form
+        onSubmit={submitData}
+        id="formulario_registro"
+        className="space-y-10"
+      >
+
+        {/* INFORMACION PERSONAL */}
+
+        <div>
+
+          <h3
+            className="
+              text-2xl
+              font-bold
+              text-white
+              mb-6
+            "
+          >
+            Información personal
+          </h3>
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              gap-6
+            "
+          >
+
+            {/* CEDULA */}
+
+            <div>
+
+              <label
+                htmlFor="cedula"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Cédula
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={id_card}
+                  className="
                     absolute
                     left-4
                     top-1/2
                     -translate-y-1/2
                     w-5
-                    opacity-60
+                    opacity-40
+                    invert
                   "
-                  />
+                />
 
-                  <input
-                    id="cedula"
-                    className="
+                <input
+                  id="cedula"
+                  name="cedula"
+                  type="text"
+                  placeholder="Ingresa tu cédula"
+                  onChange={change}
+                  value={formData.cedula}
+                  required
+
+                  className="
                     w-full
-                    bg-white/80
+                    h-14
+                    bg-white/[0.04]
                     border
-                    border-slate-200
+                    border-white/10
                     rounded-2xl
                     pl-12
                     pr-4
-                    py-4
+                    text-white
+                    placeholder:text-zinc-500
                     outline-none
                     transition-all
-                    focus:border-orange-400
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
                     focus:ring-4
-                    focus:ring-orange-100
+                    focus:ring-orange-500/10
                   "
-                    name="cedula"
-                    placeholder="Ingresa tu cédula"
-                    type="text"
-                    onChange={change}
-                    value={formData.cedula}
-                    required
-                  />
-                </div>
+                />
+
               </div>
 
-              {/* TELEFONO */}
-
-              <div>
-                <label
-                  htmlFor="telefono"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Teléfono
-                </label>
-
-                <div className="relative">
-                  <img
-                    src={phone}
-                    className="
-                    absolute
-                    left-4
-                    top-1/2
-                    -translate-y-1/2
-                    w-5
-                    opacity-60
-                  "
-                  />
-
-                  <input
-                    id="telefono"
-                    className="
-                    w-full
-                    bg-white/80
-                    border
-                    border-slate-200
-                    rounded-2xl
-                    pl-12
-                    pr-4
-                    py-4
-                    outline-none
-                    transition-all
-                    focus:border-orange-400
-                    focus:ring-4
-                    focus:ring-orange-100
-                  "
-                    name="telefono"
-                    placeholder="Ingresa tu teléfono"
-                    type="text"
-                    onChange={change}
-                    value={formData.telefono}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* NOMBRE */}
-
-              <div>
-                <label
-                  htmlFor="nombre"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Nombre
-                </label>
-
-                <div className="relative">
-                  <img
-                    src={person}
-                    className="
-                    absolute
-                    left-4
-                    top-1/2
-                    -translate-y-1/2
-                    w-5
-                    opacity-60
-                  "
-                  />
-
-                  <input
-                    id="nombre"
-                    className="
-                    w-full
-                    bg-white/80
-                    border
-                    border-slate-200
-                    rounded-2xl
-                    pl-12
-                    pr-4
-                    py-4
-                    outline-none
-                    transition-all
-                    focus:border-orange-400
-                    focus:ring-4
-                    focus:ring-orange-100
-                  "
-                    name="nombre"
-                    placeholder="Nombre"
-                    type="text"
-                    onChange={change}
-                    value={formData.nombre}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* APELLIDO */}
-
-              <div>
-                <label
-                  htmlFor="apellido"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Apellido
-                </label>
-
-                <div className="relative">
-                  <img
-                    src={person}
-                    className="
-                    absolute
-                    left-4
-                    top-1/2
-                    -translate-y-1/2
-                    w-5
-                    opacity-60
-                  "
-                  />
-
-                  <input
-                    id="apellido"
-                    className="
-                    w-full
-                    bg-white/80
-                    border
-                    border-slate-200
-                    rounded-2xl
-                    pl-12
-                    pr-4
-                    py-4
-                    outline-none
-                    transition-all
-                    focus:border-orange-400
-                    focus:ring-4
-                    focus:ring-orange-100
-                  "
-                    name="apellido"
-                    placeholder="Apellido"
-                    type="text"
-                    onChange={change}
-                    value={formData.apellido}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* CORREO */}
-
-              <div>
-                <label
-                  htmlFor="correo"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Correo electrónico
-                </label>
-
-                <div className="relative">
-                  <img
-                    src={emailico}
-                    className="
-                    absolute
-                    left-4
-                    top-1/2
-                    -translate-y-1/2
-                    w-5
-                    opacity-60
-                  "
-                  />
-
-                  <input
-                    id="correo"
-                    className="
-                    w-full
-                    bg-white/80
-                    border
-                    border-slate-200
-                    rounded-2xl
-                    pl-12
-                    pr-4
-                    py-4
-                    outline-none
-                    transition-all
-                    focus:border-orange-400
-                    focus:ring-4
-                    focus:ring-orange-100
-                  "
-                    name="correo"
-                    placeholder="Correo electrónico"
-                    type="email"
-                    onChange={change}
-                    value={formData.correo}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* DIRECCION */}
-
-              <div>
-                <label
-                  htmlFor="direccion"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Dirección
-                </label>
-
-                <div className="relative">
-                  <img
-                    src={mapin}
-                    className="
-                    absolute
-                    left-4
-                    top-1/2
-                    -translate-y-1/2
-                    w-5
-                    opacity-60
-                  "
-                  />
-
-                  <input
-                    id="direccion"
-                    className="
-                    w-full
-                    bg-white/80
-                    border
-                    border-slate-200
-                    rounded-2xl
-                    pl-12
-                    pr-4
-                    py-4
-                    outline-none
-                    transition-all
-                    focus:border-orange-400
-                    focus:ring-4
-                    focus:ring-orange-100
-                  "
-                    name="direccion"
-                    placeholder="Dirección"
-                    type="text"
-                    onChange={change}
-                    value={formData.direccion}
-                    required
-                  />
-                </div>
-              </div>
             </div>
+
+            {/* TELEFONO */}
+
+            <div>
+
+              <label
+                htmlFor="telefono"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Teléfono
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={phone}
+                  className="
+                    absolute
+                    left-4
+                    top-1/2
+                    -translate-y-1/2
+                    w-5
+                    opacity-40
+                    invert
+                  "
+                />
+
+                <input
+                  id="telefono"
+                  name="telefono"
+                  type="text"
+                  placeholder="Ingresa tu teléfono"
+                  onChange={change}
+                  value={formData.telefono}
+                  required
+
+                  className="
+                    w-full
+                    h-14
+                    bg-white/[0.04]
+                    border
+                    border-white/10
+                    rounded-2xl
+                    pl-12
+                    pr-4
+                    text-white
+                    placeholder:text-zinc-500
+                    outline-none
+                    transition-all
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
+                    focus:ring-4
+                    focus:ring-orange-500/10
+                  "
+                />
+
+              </div>
+
+            </div>
+
+            {/* NOMBRE */}
+
+            <div>
+
+              <label
+                htmlFor="nombre"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Nombre
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={person}
+                  className="
+                    absolute
+                    left-4
+                    top-1/2
+                    -translate-y-1/2
+                    w-5
+                    opacity-40
+                    invert
+                  "
+                />
+
+                <input
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Nombre"
+                  onChange={change}
+                  value={formData.nombre}
+                  required
+
+                  className="
+                    w-full
+                    h-14
+                    bg-white/[0.04]
+                    border
+                    border-white/10
+                    rounded-2xl
+                    pl-12
+                    pr-4
+                    text-white
+                    placeholder:text-zinc-500
+                    outline-none
+                    transition-all
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
+                    focus:ring-4
+                    focus:ring-orange-500/10
+                  "
+                />
+
+              </div>
+
+            </div>
+
+            {/* APELLIDO */}
+
+            <div>
+
+              <label
+                htmlFor="apellido"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Apellido
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={person}
+                  className="
+                    absolute
+                    left-4
+                    top-1/2
+                    -translate-y-1/2
+                    w-5
+                    opacity-40
+                    invert
+                  "
+                />
+
+                <input
+                  id="apellido"
+                  name="apellido"
+                  type="text"
+                  placeholder="Apellido"
+                  onChange={change}
+                  value={formData.apellido}
+                  required
+
+                  className="
+                    w-full
+                    h-14
+                    bg-white/[0.04]
+                    border
+                    border-white/10
+                    rounded-2xl
+                    pl-12
+                    pr-4
+                    text-white
+                    placeholder:text-zinc-500
+                    outline-none
+                    transition-all
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
+                    focus:ring-4
+                    focus:ring-orange-500/10
+                  "
+                />
+
+              </div>
+
+            </div>
+
+            {/* CORREO */}
+
+            <div>
+
+              <label
+                htmlFor="correo"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Correo electrónico
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={emailico}
+                  className="
+                    absolute
+                    left-4
+                    top-1/2
+                    -translate-y-1/2
+                    w-5
+                    opacity-40
+                    invert
+                  "
+                />
+
+                <input
+                  id="correo"
+                  name="correo"
+                  type="email"
+                  placeholder="Correo electrónico"
+                  onChange={change}
+                  value={formData.correo}
+                  required
+
+                  className="
+                    w-full
+                    h-14
+                    bg-white/[0.04]
+                    border
+                    border-white/10
+                    rounded-2xl
+                    pl-12
+                    pr-4
+                    text-white
+                    placeholder:text-zinc-500
+                    outline-none
+                    transition-all
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
+                    focus:ring-4
+                    focus:ring-orange-500/10
+                  "
+                />
+
+              </div>
+
+            </div>
+
+            {/* DIRECCION */}
+
+            <div>
+
+              <label
+                htmlFor="direccion"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Dirección
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={mapin}
+                  className="
+                    absolute
+                    left-4
+                    top-1/2
+                    -translate-y-1/2
+                    w-5
+                    opacity-40
+                    invert
+                  "
+                />
+
+                <input
+                  id="direccion"
+                  name="direccion"
+                  type="text"
+                  placeholder="Dirección"
+                  onChange={change}
+                  value={formData.direccion}
+                  required
+
+                  className="
+                    w-full
+                    h-14
+                    bg-white/[0.04]
+                    border
+                    border-white/10
+                    rounded-2xl
+                    pl-12
+                    pr-4
+                    text-white
+                    placeholder:text-zinc-500
+                    outline-none
+                    transition-all
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
+                    focus:ring-4
+                    focus:ring-orange-500/10
+                  "
+                />
+
+              </div>
+
+            </div>
+
           </div>
 
-          {/* CUENTA */}
+        </div>
 
-          <div>
-            <h3
-              className="
-            text-2xl
-            font-bold
-            text-slate-700
-            mb-6
-          "
-            >
-              Datos de la cuenta
-            </h3>
+        {/* DATOS CUENTA */}
 
-            <div
-              className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            gap-6
-          "
-            >
-              {/* USERNAME */}
+        <div>
 
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Usuario
-                </label>
+          <h3
+            className="
+              text-2xl
+              font-bold
+              text-white
+              mb-6
+            "
+          >
+            Datos de la cuenta
+          </h3>
 
-                <div className="relative">
-                  <img
-                    src={arroba}
-                    className="
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              gap-6
+            "
+          >
+
+            {/* USERNAME */}
+
+            <div>
+
+              <label
+                htmlFor="username"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Usuario
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={arroba}
+                  className="
                     absolute
                     left-4
                     top-1/2
                     -translate-y-1/2
                     w-5
-                    opacity-60
+                    opacity-40
+                    invert
                   "
-                  />
+                />
 
-                  <input
-                    id="username"
-                    className="
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  placeholder="Ingresa tu usuario"
+                  onChange={change}
+                  value={formData.username}
+                  required
+
+                  className="
                     w-full
-                    bg-white/80
+                    h-14
+                    bg-white/[0.04]
                     border
-                    border-slate-200
+                    border-white/10
                     rounded-2xl
                     pl-12
                     pr-4
-                    py-4
+                    text-white
+                    placeholder:text-zinc-500
                     outline-none
                     transition-all
-                    focus:border-orange-400
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
                     focus:ring-4
-                    focus:ring-orange-100
+                    focus:ring-orange-500/10
                   "
-                    name="username"
-                    placeholder="Usuario"
-                    type="text"
-                    onChange={change}
-                    value={formData.username}
-                    required
-                  />
-                </div>
+                />
+
               </div>
 
-              {/* PASSWORD */}
+            </div>
 
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Contraseña
-                </label>
+            {/* PASSWORD */}
 
-                <div className="relative">
-                  <img
-                    src={passkey}
-                    className="
+            <div>
+
+              <label
+                htmlFor="password"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Contraseña
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={passkey}
+                  className="
                     absolute
                     left-4
                     top-1/2
                     -translate-y-1/2
                     w-5
-                    opacity-60
+                    opacity-40
+                    invert
                   "
-                  />
+                />
 
-                  <input
-                    id="password"
-                    className="
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Ingresa tu contraseña"
+                  onChange={change}
+                  value={formData.password}
+                  required
+
+                  className="
                     w-full
-                    bg-white/80
+                    h-14
+                    bg-white/[0.04]
                     border
-                    border-slate-200
+                    border-white/10
                     rounded-2xl
                     pl-12
                     pr-4
-                    py-4
+                    text-white
+                    placeholder:text-zinc-500
                     outline-none
                     transition-all
-                    focus:border-orange-400
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
                     focus:ring-4
-                    focus:ring-orange-100
+                    focus:ring-orange-500/10
                   "
-                    name="password"
-                    placeholder="Contraseña"
-                    type="password"
-                    onChange={change}
-                    value={formData.password}
-                    required
-                  />
-                </div>
+                />
+
               </div>
 
-              {/* TIPO USUARIO */}
+            </div>
 
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="tipo_usuario"
-                  className="block mb-2 font-medium text-slate-700"
-                >
-                  Tipo de usuario
-                </label>
+            {/* TIPO USUARIO */}
 
-                <div className="relative">
-                  <img
-                    src={grupos}
-                    className="
+            <div className="md:col-span-2">
+
+              <label
+                htmlFor="tipo_usuario"
+                className="
+                  block
+                  text-sm
+                  text-zinc-300
+                  mb-3
+                  font-medium
+                "
+              >
+                Tipo de usuario
+              </label>
+
+              <div className="relative">
+
+                <img
+                  src={grupos}
+                  className="
                     absolute
                     left-4
                     top-1/2
                     -translate-y-1/2
                     w-5
-                    opacity-60
+                    opacity-40
+                    invert
                     z-10
                   "
-                  />
+                />
 
-                  <select
-                    className="
+                <select
+                  id="tipo_usuario"
+                  name="tipo_usuario"
+                  onChange={change}
+                  defaultValue=""
+                  required
+
+                  className="
                     w-full
-                    bg-white/80
+                    h-14
+                    bg-white/[0.04]
                     border
-                    border-slate-200
+                    border-white/10
                     rounded-2xl
                     pl-12
                     pr-4
-                    py-4
+                    text-white
                     outline-none
                     transition-all
-                    focus:border-orange-400
+                    duration-300
+                    focus:border-orange-500
+                    focus:bg-white/[0.06]
                     focus:ring-4
-                    focus:ring-orange-100
+                    focus:ring-orange-500/10
                     appearance-none
                     cursor-pointer
                   "
-                    id="tipo_usuario"
-                    name="tipo_usuario"
-                    onChange={change}
-                    defaultValue=""
-                    required
-                  >
-                    <option value="" disabled>
-                      Selecciona un tipo de usuario
-                    </option>
+                >
+                  <option value="" disabled>
+                    Selecciona un tipo
+                  </option>
 
-                    <option value="cliente">Cliente</option>
+                  <option value="cliente">
+                    Cliente
+                  </option>
 
-                    <option value="vendedor">Vendedor</option>
+                  <option value="vendedor">
+                    Vendedor
+                  </option>
 
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
+                  <option value="admin">
+                    Admin
+                  </option>
+
+                </select>
+
               </div>
+
             </div>
+
           </div>
 
-          {/* BOTON */}
+        </div>
 
-          <button
-            className="
+        {/* BOTON */}
+
+        <button
+          type="submit"
+
+          className="
             w-full
-            py-4
+            h-14
             rounded-2xl
             bg-orange-500
-            hover:bg-orange-600
+            hover:bg-orange-400
             text-white
             font-bold
-            text-lg
             transition-all
             duration-300
-            shadow-lg
-            shadow-orange-500/30
             hover:scale-[1.01]
-            active:scale-[0.99]
+            active:scale-[0.98]
+            shadow-[0_10px_30px_rgba(249,115,22,.35)]
             cursor-pointer
           "
-            type="submit"
-          >
-            Crear cuenta
-          </button>
-        </form>
-
-        {/* FOOTER */}
-
-        <div
-          className="
-        text-center
-        mt-8
-        text-slate-500
-      "
         >
-          ¿Ya tienes una cuenta?
-          <Link
-            to="/login"
-            className="
-            text-orange-500
-            font-semibold
-            ml-2
-            hover:text-orange-600
+          Crear cuenta
+        </button>
+
+      </form>
+
+      {/* FOOTER */}
+
+      <div
+        className="
+          mt-8
+          text-center
+          text-zinc-500
+          text-sm
+        "
+      >
+
+        ¿Ya tienes una cuenta?
+
+        <Link
+          to="/login"
+
+          className="
+            text-orange-400
+            hover:text-orange-300
             transition
+            ml-2
+            font-semibold
           "
-          >
-            Iniciar sesión
-          </Link>
-        </div>
+        >
+          Iniciar sesión
+        </Link>
+
       </div>
+
     </div>
-  );
+
+  </div>
+);
 };
