@@ -1,16 +1,10 @@
 import { ShoppingCart, Heart, Car, DollarSign } from "lucide-react";
-
-import { StatCard } from "../components/ui/StatCard";
-import { useContext } from "react";
-import { AuthContext } from "../context/contextos.js";
 import { BotonLogout } from "../components/BotonLogout";
 
 export const VistaCliente = () => {
-  const { logout } = useContext(AuthContext);
-
   return (
-  <div
-    className="
+    <div
+      className="
       min-h-screen
       bg-[#09090b]
       relative
@@ -18,12 +12,11 @@ export const VistaCliente = () => {
       p-8
       text-white
     "
-  >
+    >
+      {/* EFECTOS FONDO */}
 
-    {/* EFECTOS FONDO */}
-
-    <div
-      className="
+      <div
+        className="
         absolute
         w-[500px]
         h-[500px]
@@ -33,10 +26,10 @@ export const VistaCliente = () => {
         -top-40
         -left-40
       "
-    />
+      />
 
-    <div
-      className="
+      <div
+        className="
         absolute
         w-[400px]
         h-[400px]
@@ -46,16 +39,15 @@ export const VistaCliente = () => {
         bottom-0
         right-0
       "
-    />
+      />
 
-    {/* CONTENIDO */}
+      {/* CONTENIDO */}
 
-    <div className="relative z-10 space-y-8">
+      <div className="relative z-10 space-y-8">
+        {/* HEADER */}
 
-      {/* HEADER */}
-
-      <section
-        className="
+        <section
+          className="
           flex
           flex-col
           md:flex-row
@@ -63,51 +55,46 @@ export const VistaCliente = () => {
           md:justify-between
           gap-6
         "
-      >
-
-        <div>
-
-          <h1
-            className="
+        >
+          <div>
+            <h1
+              className="
               text-5xl
               font-black
               tracking-tight
               text-white
             "
-          >
-            Panel del cliente
-          </h1>
+            >
+              Panel del cliente
+            </h1>
 
-          <p
-            className="
+            <p
+              className="
               text-zinc-400
               mt-3
               text-sm
             "
-          >
-            Consulta tus compras, favoritos y vehículos vistos recientemente.
-          </p>
+            >
+              Consulta tus compras, favoritos y vehículos vistos recientemente.
+            </p>
+          </div>
 
-        </div>
+          <BotonLogout />
+        </section>
 
-        <BotonLogout />
+        {/* STATS */}
 
-      </section>
-
-      {/* STATS */}
-
-      <section
-        className="
+        <section
+          className="
           grid
           grid-cols-1
           md:grid-cols-2
           xl:grid-cols-4
           gap-6
         "
-      >
-
-        <div
-          className="
+        >
+          <div
+            className="
             bg-[#111111]
             border
             border-white/5
@@ -115,30 +102,24 @@ export const VistaCliente = () => {
             p-6
             shadow-[0_0_30px_rgba(0,0,0,.35)]
           "
-        >
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-400 text-sm">Compras</p>
 
-          <div className="flex items-center justify-between">
-
-            <div>
-
-              <p className="text-zinc-400 text-sm">
-                Compras
-              </p>
-
-              <h3
-                className="
+                <h3
+                  className="
                   text-4xl
                   font-black
                   mt-3
                 "
-              >
-                12
-              </h3>
+                >
+                  12
+                </h3>
+              </div>
 
-            </div>
-
-            <div
-              className="
+              <div
+                className="
                 w-14
                 h-14
                 rounded-2xl
@@ -148,16 +129,14 @@ export const VistaCliente = () => {
                 justify-center
                 text-orange-400
               "
-            >
-              <ShoppingCart size={28} />
+              >
+                <ShoppingCart size={28} />
+              </div>
             </div>
-
           </div>
 
-        </div>
-
-        <div
-          className="
+          <div
+            className="
             bg-[#111111]
             border
             border-white/5
@@ -165,30 +144,24 @@ export const VistaCliente = () => {
             p-6
             shadow-[0_0_30px_rgba(0,0,0,.35)]
           "
-        >
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-400 text-sm">Favoritos</p>
 
-          <div className="flex items-center justify-between">
-
-            <div>
-
-              <p className="text-zinc-400 text-sm">
-                Favoritos
-              </p>
-
-              <h3
-                className="
+                <h3
+                  className="
                   text-4xl
                   font-black
                   mt-3
                 "
-              >
-                28
-              </h3>
+                >
+                  28
+                </h3>
+              </div>
 
-            </div>
-
-            <div
-              className="
+              <div
+                className="
                 w-14
                 h-14
                 rounded-2xl
@@ -198,16 +171,14 @@ export const VistaCliente = () => {
                 justify-center
                 text-pink-400
               "
-            >
-              <Heart size={28} />
+              >
+                <Heart size={28} />
+              </div>
             </div>
-
           </div>
 
-        </div>
-
-        <div
-          className="
+          <div
+            className="
             bg-[#111111]
             border
             border-white/5
@@ -215,30 +186,24 @@ export const VistaCliente = () => {
             p-6
             shadow-[0_0_30px_rgba(0,0,0,.35)]
           "
-        >
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-400 text-sm">Vehículos vistos</p>
 
-          <div className="flex items-center justify-between">
-
-            <div>
-
-              <p className="text-zinc-400 text-sm">
-                Vehículos vistos
-              </p>
-
-              <h3
-                className="
+                <h3
+                  className="
                   text-4xl
                   font-black
                   mt-3
                 "
-              >
-                134
-              </h3>
+                >
+                  134
+                </h3>
+              </div>
 
-            </div>
-
-            <div
-              className="
+              <div
+                className="
                 w-14
                 h-14
                 rounded-2xl
@@ -248,16 +213,14 @@ export const VistaCliente = () => {
                 justify-center
                 text-cyan-400
               "
-            >
-              <Car size={28} />
+              >
+                <Car size={28} />
+              </div>
             </div>
-
           </div>
 
-        </div>
-
-        <div
-          className="
+          <div
+            className="
             bg-[#111111]
             border
             border-white/5
@@ -265,30 +228,24 @@ export const VistaCliente = () => {
             p-6
             shadow-[0_0_30px_rgba(0,0,0,.35)]
           "
-        >
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-400 text-sm">Presupuesto</p>
 
-          <div className="flex items-center justify-between">
-
-            <div>
-
-              <p className="text-zinc-400 text-sm">
-                Presupuesto
-              </p>
-
-              <h3
-                className="
+                <h3
+                  className="
                   text-4xl
                   font-black
                   mt-3
                 "
-              >
-                $80M
-              </h3>
+                >
+                  $80M
+                </h3>
+              </div>
 
-            </div>
-
-            <div
-              className="
+              <div
+                className="
                 w-14
                 h-14
                 rounded-2xl
@@ -298,20 +255,17 @@ export const VistaCliente = () => {
                 justify-center
                 text-green-400
               "
-            >
-              <DollarSign size={28} />
+              >
+                <DollarSign size={28} />
+              </div>
             </div>
-
           </div>
+        </section>
 
-        </div>
+        {/* TABLA */}
 
-      </section>
-
-      {/* TABLA */}
-
-      <section
-        className="
+        <section
+          className="
           bg-[#111111]
           border
           border-white/5
@@ -319,10 +273,9 @@ export const VistaCliente = () => {
           p-8
           shadow-[0_0_40px_rgba(0,0,0,.35)]
         "
-      >
-
-        <div
-          className="
+        >
+          <div
+            className="
             flex
             flex-col
             md:flex-row
@@ -331,28 +284,25 @@ export const VistaCliente = () => {
             gap-4
             mb-8
           "
-        >
-
-          <div>
-
-            <h2
-              className="
+          >
+            <div>
+              <h2
+                className="
                 text-3xl
                 font-black
                 text-white
               "
-            >
-              Vehículos favoritos
-            </h2>
+              >
+                Vehículos favoritos
+              </h2>
 
-            <p className="text-zinc-500 mt-2 text-sm">
-              Consulta los vehículos guardados en favoritos.
-            </p>
+              <p className="text-zinc-500 mt-2 text-sm">
+                Consulta los vehículos guardados en favoritos.
+              </p>
+            </div>
 
-          </div>
-
-          <button
-            className="
+            <button
+              className="
               h-14
               px-7
               rounded-2xl
@@ -366,66 +316,50 @@ export const VistaCliente = () => {
               active:scale-[0.98]
               shadow-[0_10px_30px_rgba(249,115,22,.25)]
             "
-          >
-            Explorar vehículos
-          </button>
+            >
+              Explorar vehículos
+            </button>
+          </div>
 
-        </div>
-
-        <div className="overflow-x-auto">
-
-          <table className="w-full">
-
-            <thead>
-
-              <tr
-                className="
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr
+                  className="
                   border-b
                   border-white/10
                   text-left
                   text-zinc-400
                 "
-              >
+                >
+                  <th className="pb-5 font-medium">Marca</th>
 
-                <th className="pb-5 font-medium">Marca</th>
+                  <th className="pb-5 font-medium">Modelo</th>
 
-                <th className="pb-5 font-medium">Modelo</th>
+                  <th className="pb-5 font-medium">Precio</th>
 
-                <th className="pb-5 font-medium">Precio</th>
+                  <th className="pb-5 font-medium">Estado</th>
+                </tr>
+              </thead>
 
-                <th className="pb-5 font-medium">Estado</th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              <tr
-                className="
+              <tbody>
+                <tr
+                  className="
                   border-b
                   border-white/5
                   hover:bg-white/[0.02]
                   transition-all
                 "
-              >
+                >
+                  <td className="py-6 font-semibold">BMW</td>
 
-                <td className="py-6 font-semibold">
-                  BMW
-                </td>
+                  <td className="text-zinc-300">X5</td>
 
-                <td className="text-zinc-300">
-                  X5
-                </td>
+                  <td className="text-zinc-300">$240.000.000</td>
 
-                <td className="text-zinc-300">
-                  $240.000.000
-                </td>
-
-                <td>
-
-                  <span
-                    className="
+                  <td>
+                    <span
+                      className="
                       bg-green-500/10
                       text-green-400
                       px-4
@@ -434,39 +368,29 @@ export const VistaCliente = () => {
                       text-xs
                       font-semibold
                     "
-                  >
-                    Disponible
-                  </span>
+                    >
+                      Disponible
+                    </span>
+                  </td>
+                </tr>
 
-                </td>
-
-              </tr>
-
-              <tr
-                className="
+                <tr
+                  className="
                   border-b
                   border-white/5
                   hover:bg-white/[0.02]
                   transition-all
                 "
-              >
+                >
+                  <td className="py-6 font-semibold">Audi</td>
 
-                <td className="py-6 font-semibold">
-                  Audi
-                </td>
+                  <td className="text-zinc-300">A4</td>
 
-                <td className="text-zinc-300">
-                  A4
-                </td>
+                  <td className="text-zinc-300">$180.000.000</td>
 
-                <td className="text-zinc-300">
-                  $180.000.000
-                </td>
-
-                <td>
-
-                  <span
-                    className="
+                  <td>
+                    <span
+                      className="
                       bg-yellow-500/10
                       text-yellow-400
                       px-4
@@ -475,24 +399,16 @@ export const VistaCliente = () => {
                       text-xs
                       font-semibold
                     "
-                  >
-                    Reservado
-                  </span>
-
-                </td>
-
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </section>
-
+                    >
+                      Reservado
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </div>
-
-  </div>
-);
+  );
 };

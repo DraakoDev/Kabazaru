@@ -6,6 +6,7 @@ import passkey from "../assets/passkey.svg";
 import arroba from "../assets/arroba.svg";
 import { Link } from "react-router";
 import { backendURL } from "../config";
+import Swal from "sweetalert2";
 
 export const FormularioLogin = () => {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
@@ -49,8 +50,8 @@ export const FormularioLogin = () => {
   };
 
   return (
-  <div
-    className="
+    <div
+      className="
       min-h-screen
       flex
       items-center
@@ -61,12 +62,11 @@ export const FormularioLogin = () => {
       relative
       overflow-hidden
     "
-  >
+    >
+      {/* FONDOS */}
 
-    {/* FONDOS */}
-
-    <div
-      className="
+      <div
+        className="
         absolute
         w-[500px]
         h-[500px]
@@ -76,10 +76,10 @@ export const FormularioLogin = () => {
         -top-40
         -left-40
       "
-    />
+      />
 
-    <div
-      className="
+      <div
+        className="
         absolute
         w-[400px]
         h-[400px]
@@ -89,12 +89,12 @@ export const FormularioLogin = () => {
         bottom-0
         right-0
       "
-    />
+      />
 
-    {/* CARD */}
+      {/* CARD */}
 
-    <div
-      className="
+      <div
+        className="
         relative
         w-full
         max-w-md
@@ -106,67 +106,58 @@ export const FormularioLogin = () => {
         p-10
         shadow-[0_0_60px_rgba(0,0,0,.45)]
       "
-    >
+      >
+        {/* LOGO */}
 
-      {/* LOGO */}
-
-      <div className="text-center mb-10">
-
-        <h1
-          className="
+        <div className="text-center mb-10">
+          <h1
+            className="
             text-5xl
             font-black
             tracking-tight
             text-white
           "
-        >
-          Zaru
-        </h1>
+          >
+            Zaru
+          </h1>
 
-        <p
-          className="
+          <p
+            className="
             text-zinc-400
             mt-4
             text-sm
             leading-relaxed
           "
-        >
-          Bienvenido de nuevo.
-          <br />
-          Inicia sesión para continuar.
-        </p>
+          >
+            Bienvenido de nuevo.
+            <br />
+            Inicia sesión para continuar.
+          </p>
+        </div>
 
-      </div>
+        {/* FORM */}
 
-      {/* FORM */}
+        <form onSubmit={submitData} className="space-y-6">
+          {/* USERNAME */}
 
-      <form
-        onSubmit={submitData}
-        className="space-y-6"
-      >
-
-        {/* USERNAME */}
-
-        <div>
-
-          <label
-            htmlFor="username"
-            className="
+          <div>
+            <label
+              htmlFor="username"
+              className="
               block
               text-sm
               text-zinc-300
               mb-3
               font-medium
             "
-          >
-            Usuario
-          </label>
+            >
+              Usuario
+            </label>
 
-          <div className="relative">
-
-            <img
-              src={arroba}
-              className="
+            <div className="relative">
+              <img
+                src={arroba}
+                className="
                 absolute
                 left-4
                 top-1/2
@@ -175,18 +166,17 @@ export const FormularioLogin = () => {
                 opacity-40
                 invert
               "
-            />
+              />
 
-            <input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Ingresa tu usuario"
-              onChange={change}
-              value={loginData.username}
-              required
-
-              className="
+              <input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Ingresa tu usuario"
+                onChange={change}
+                value={loginData.username}
+                required
+                className="
                 w-full
                 h-14
                 bg-white/[0.04]
@@ -206,34 +196,30 @@ export const FormularioLogin = () => {
                 focus:ring-4
                 focus:ring-orange-500/10
               "
-            />
-
+              />
+            </div>
           </div>
 
-        </div>
+          {/* PASSWORD */}
 
-        {/* PASSWORD */}
-
-        <div>
-
-          <label
-            htmlFor="password"
-            className="
+          <div>
+            <label
+              htmlFor="password"
+              className="
               block
               text-sm
               text-zinc-300
               mb-3
               font-medium
             "
-          >
-            Contraseña
-          </label>
+            >
+              Contraseña
+            </label>
 
-          <div className="relative">
-
-            <img
-              src={passkey}
-              className="
+            <div className="relative">
+              <img
+                src={passkey}
+                className="
                 absolute
                 left-4
                 top-1/2
@@ -242,18 +228,17 @@ export const FormularioLogin = () => {
                 opacity-40
                 invert
               "
-            />
+              />
 
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Ingresa tu contraseña"
-              onChange={change}
-              value={loginData.password}
-              required
-
-              className="
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Ingresa tu contraseña"
+                onChange={change}
+                value={loginData.password}
+                required
+                className="
                 w-full
                 h-14
                 bg-white/[0.04]
@@ -273,18 +258,15 @@ export const FormularioLogin = () => {
                 focus:ring-4
                 focus:ring-orange-500/10
               "
-            />
-
+              />
+            </div>
           </div>
 
-        </div>
+          {/* BUTTON */}
 
-        {/* BUTTON */}
-
-        <button
-          type="submit"
-
-          className="
+          <button
+            type="submit"
+            className="
             w-full
             h-14
             rounded-2xl
@@ -299,65 +281,53 @@ export const FormularioLogin = () => {
             shadow-[0_10px_30px_rgba(249,115,22,.35)]
             cursor-pointer
           "
-        >
-          Iniciar sesión
-        </button>
+          >
+            Iniciar sesión
+          </button>
 
-{/* RECUPERAR CONTRASEÑA */}
+          {/* RECUPERAR CONTRASEÑA */}
 
-<div className="flex justify-end">
-
-  <Link
-    to="/recuperar-password"
-
-    className="
+          <div className="flex justify-end">
+            <Link
+              to="/recover-password"
+              className="
       text-sm
       text-zinc-400
       hover:text-orange-400
       transition-all
       duration-300
     "
-  >
-    ¿Olvidaste tu contraseña?
-  </Link>
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
+        </form>
 
-</div>
+        {/* FOOTER */}
 
-      </form>
-      
-
-
-      {/* FOOTER */}
-
-      <div
-        className="
+        <div
+          className="
           mt-8
           text-center
           text-zinc-500
           text-sm
         "
-      >
-
-        ¿No tienes cuenta?
-
-        <Link
-          to="/registro"
-
-          className="
+        >
+          ¿No tienes cuenta?
+          <Link
+            to="/registro"
+            className="
             text-orange-400
             hover:text-orange-300
             transition
             ml-2
             font-semibold
           "
-        >
-          Crear cuenta
-        </Link>
-
+          >
+            Crear cuenta
+          </Link>
+        </div>
       </div>
-
     </div>
-
-  </div>
-);
+  );
 };

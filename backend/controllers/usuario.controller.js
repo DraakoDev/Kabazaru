@@ -1,4 +1,4 @@
-import { cambiarContrasena, checkLogin, crearUsuario, eliminarUsuario, getPersonInDB, getUserInDB } from '../model/usuario.model.js'
+import { cambiarContrasena, checkLogin, crearUsuario, eliminarUsuario, getPersonInDB, getUserInDB, listarUsuarios } from '../model/usuario.model.js'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { transporter } from '../services/mail/mailer.js'
@@ -54,8 +54,8 @@ export const repassword = async (req, res) => {
     console.log(data)
     if (data === null) return res.send({ message: 'La clave a expirado' })
     const response = await cambiarContrasena(data.nombre_usuario, nuevaContrasena)
-    if (response === 0) res.send({ message: 'No se pudo cambiar la contrasena' })
-    if (response === 1) res.send({ message: 'Contrasena cambiada con exito' })
+    if (response === 0) return res.send({ message: 'No se pudo cambiar la contrasena', success: false })
+    if (response === 1) return res.send({ message: 'Contrasena cambiada con exito', success: true })
   } catch {}
 }
 
@@ -66,7 +66,7 @@ export const enviarCorreoRecuperacion = async (req, res) => {
   console.log(persona)
   if (!user) return res.status(404).send({ message: 'El usuario no esta registrado' })
   const token = jwt.sign(user, process.env.SECRET_JWT_KEY, { expiresIn: '15m' })
-  const link = `http://localhost:5173/reset-password/${token}`
+  const link = `http://localhost:5173/cambiar-password/${token}`
 
   await transporter.sendMail({
     from: process.env.MAIL_USERNAME,
@@ -245,7 +245,7 @@ Conduce hacia el futuro 🚘
 `
   })
 
-  res.send({ message: 'Correo de recuperacion enviado' })
+  res.send({ success: true, message: 'Correo de recuperacion enviado' })
 }
 
 export const borrarUsuario = (req, res) => {
@@ -256,5 +256,14 @@ export const borrarUsuario = (req, res) => {
     res.send({ message: 'El usuario fue eliminado correctamente' })
   } catch (error) {
     res.send({ message: 'No se pudo eliminar el usuaior', error: error.message })
+  }
+}
+
+export const getAllUsuarios = async (req, res) => {
+  try {
+    const usuarios = await listarUsuarios()
+    res.status(200).send({ success: true, data: usuarios })
+  } catch (error) {
+    res.status(500).send({ success: false, error: error.message })
   }
 }

@@ -1,29 +1,34 @@
-const API =
-  "http://localhost:3000";
+const API = "http://localhost:3000";
 
-export const getPersonas =
-async () => {
-
-  const response =
-    await fetch(`${API}/personas`);
-
+export const getPersonas = async (token) => {
+  const response = await fetch(`${API}/personas`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  });
   return response.json();
 };
 
-export const getUsuarios =
-async () => {
-
-  const response =
-    await fetch(`${API}/usuarios`);
-
+export const getUsuarios = async (token) => {
+  const response = await fetch(`${API}/usuarios`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  });
   return response.json();
 };
 
-export const getVendedores =
-async () => {
-
-  const response =
-    await fetch(`${API}/vendedores`);
-
+export const getVendedores = async (token) => {
+  const response = await fetch(`${API}/personas/vendedores/list`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  });
   return response.json();
 };

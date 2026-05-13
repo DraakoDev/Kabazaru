@@ -1,11 +1,11 @@
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+
 import passkey from "../assets/passkey.svg";
 import { backendURL } from "../config";
 
 export const FormularioCambioContraseña = () => {
-
   const navigate = useNavigate();
 
   const [passwordData, setPasswordData] = useState({
@@ -14,22 +14,19 @@ export const FormularioCambioContraseña = () => {
   });
 
   const change = (e) => {
-
     const { name, value } = e.target;
 
     setPasswordData({
       ...passwordData,
       [name]: value,
     });
-
   };
 
+  const { token } = useParams();
   const submitData = async (e) => {
-
     e.preventDefault();
 
     if (passwordData.password !== passwordData.confirmPassword) {
-
       Swal.fire({
         title: "Error",
         text: "Las contraseñas no coinciden.",
@@ -40,34 +37,27 @@ export const FormularioCambioContraseña = () => {
     }
 
     try {
+      const response = await fetch(`${backendURL}/reset-password/${token}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      const response = await fetch(
-        `${backendURL}/change-password`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+        method: "POST",
 
-          method: "POST",
-
-          body: JSON.stringify({
-            password: passwordData.password,
-          }),
-        }
-      );
+        body: JSON.stringify({
+          nuevaContrasena: passwordData.password,
+        }),
+      });
 
       const data = await response.json();
 
       if (!data.success) {
-
         Swal.fire({
           title: "Error",
           text: data.error,
           icon: "warning",
         });
-
       } else {
-
         Swal.fire({
           title: "Contraseña actualizada",
           text: "Tu contraseña ha sido cambiada correctamente.",
@@ -75,11 +65,8 @@ export const FormularioCambioContraseña = () => {
         });
 
         navigate("/login");
-
       }
-
     } catch (error) {
-
       Swal.fire({
         title: "(|||❛︵❛。)",
         text: "No fue posible conectarse al servidor.",
@@ -87,7 +74,6 @@ export const FormularioCambioContraseña = () => {
       });
 
       console.log(error);
-
     }
   };
 
@@ -105,7 +91,6 @@ export const FormularioCambioContraseña = () => {
         overflow-hidden
       "
     >
-
       {/* FONDOS */}
 
       <div
@@ -149,11 +134,9 @@ export const FormularioCambioContraseña = () => {
           shadow-[0_0_60px_rgba(0,0,0,.65)]
         "
       >
-
         {/* HEADER */}
 
         <div className="text-center mb-10">
-
           <h1
             className="
               text-4xl
@@ -177,20 +160,14 @@ export const FormularioCambioContraseña = () => {
             <br />
             para recuperar el acceso a tu cuenta.
           </p>
-
         </div>
 
         {/* FORM */}
 
-        <form
-          onSubmit={submitData}
-          className="space-y-6"
-        >
-
+        <form onSubmit={submitData} className="space-y-6">
           {/* PASSWORD */}
 
           <div>
-
             <label
               htmlFor="password"
               className="
@@ -205,7 +182,6 @@ export const FormularioCambioContraseña = () => {
             </label>
 
             <div className="relative">
-
               <img
                 src={passkey}
                 className="
@@ -227,7 +203,6 @@ export const FormularioCambioContraseña = () => {
                 onChange={change}
                 value={passwordData.password}
                 required
-
                 className="
                   w-full
                   h-14
@@ -249,15 +224,12 @@ export const FormularioCambioContraseña = () => {
                   focus:ring-orange-500/10
                 "
               />
-
             </div>
-
           </div>
 
           {/* CONFIRM PASSWORD */}
 
           <div>
-
             <label
               htmlFor="confirmPassword"
               className="
@@ -272,7 +244,6 @@ export const FormularioCambioContraseña = () => {
             </label>
 
             <div className="relative">
-
               <img
                 src={passkey}
                 className="
@@ -294,7 +265,6 @@ export const FormularioCambioContraseña = () => {
                 onChange={change}
                 value={passwordData.confirmPassword}
                 required
-
                 className="
                   w-full
                   h-14
@@ -316,16 +286,13 @@ export const FormularioCambioContraseña = () => {
                   focus:ring-orange-500/10
                 "
               />
-
             </div>
-
           </div>
 
           {/* BUTTON */}
 
           <button
             type="submit"
-
             className="
               w-full
               h-14
@@ -344,7 +311,6 @@ export const FormularioCambioContraseña = () => {
           >
             Cambiar contraseña
           </button>
-
         </form>
 
         {/* FOOTER */}
@@ -357,12 +323,9 @@ export const FormularioCambioContraseña = () => {
             text-sm
           "
         >
-
           ¿Volver al inicio?
-
           <Link
             to="/login"
-
             className="
               text-orange-400
               hover:text-orange-300
@@ -373,11 +336,8 @@ export const FormularioCambioContraseña = () => {
           >
             Iniciar sesión
           </Link>
-
         </div>
-
       </div>
-
     </div>
   );
 };

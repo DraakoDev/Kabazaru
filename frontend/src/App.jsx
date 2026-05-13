@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { GestionUsuarios } from "./pages/admin/GestionUsuarios.jsx";
 import { CrearCuenta } from "./pages/CrearCuenta.jsx";
 import { LoginPage } from "./pages/LoginPage.jsx";
@@ -18,10 +18,12 @@ function App() {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registro" element={<CrearCuenta />} />
-          <Route path="/recover-password"  element={<RecuperacionPage />}/> 
-          <Route path="/cambiar-password" element={<CambioContraPage />}/>
+          <Route path="/recover-password" element={<RecuperacionPage />} />
+          <Route
+            path="/cambiar-password/:token"
+            element={<CambioContraPage />}
+          />
 
-           
           {/* PRIVADAS */}
 
           <Route
@@ -48,10 +50,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* REDIRECT */}
-
-          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -5,7 +5,6 @@ import arroba from "../assets/arroba.svg";
 import { backendURL } from "../config";
 
 export const FormularioRecuperacion = () => {
-
   const [recoveryData, setRecoveryData] = useState({
     username: "",
   });
@@ -23,43 +22,32 @@ export const FormularioRecuperacion = () => {
     e.preventDefault();
 
     try {
+      const response = await fetch(`${backendURL}/forgot-password`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      const response = await fetch(
-        `${backendURL}/recover-password`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+        method: "POST",
 
-          method: "POST",
-
-          body: JSON.stringify(recoveryData),
-        }
-      );
+        body: JSON.stringify(recoveryData),
+      });
 
       const data = await response.json();
 
       if (!data.success) {
-
         Swal.fire({
           title: "Error",
           text: data.error,
           icon: "warning",
         });
-
       } else {
-
         Swal.fire({
           title: "Correo enviado",
-          text:
-            "Se ha enviado un enlace de recuperación al correo asociado a esta cuenta.",
+          text: "Se ha enviado un enlace de recuperación al correo asociado a esta cuenta.",
           icon: "success",
         });
-
       }
-
     } catch (error) {
-
       Swal.fire({
         title: "(|||❛︵❛。)",
         text: "No fue posible conectarse al servidor.",
@@ -67,7 +55,6 @@ export const FormularioRecuperacion = () => {
       });
 
       console.log(error);
-
     }
   };
 
@@ -85,7 +72,6 @@ export const FormularioRecuperacion = () => {
         overflow-hidden
       "
     >
-
       {/* FONDOS */}
 
       <div
@@ -129,11 +115,9 @@ export const FormularioRecuperacion = () => {
           shadow-[0_0_60px_rgba(0,0,0,.65)]
         "
       >
-
         {/* HEADER */}
 
         <div className="text-center mb-10">
-
           <h1
             className="
               text-4xl
@@ -157,20 +141,14 @@ export const FormularioRecuperacion = () => {
             <br />
             Se enviará un correo al email asociado a la cuenta.
           </p>
-
         </div>
 
         {/* FORM */}
 
-        <form
-          onSubmit={submitData}
-          className="space-y-6"
-        >
-
+        <form onSubmit={submitData} className="space-y-6">
           {/* USERNAME */}
 
           <div>
-
             <label
               htmlFor="username"
               className="
@@ -185,7 +163,6 @@ export const FormularioRecuperacion = () => {
             </label>
 
             <div className="relative">
-
               <img
                 src={arroba}
                 className="
@@ -207,7 +184,6 @@ export const FormularioRecuperacion = () => {
                 onChange={change}
                 value={recoveryData.username}
                 required
-
                 className="
                   w-full
                   h-14
@@ -229,16 +205,13 @@ export const FormularioRecuperacion = () => {
                   focus:ring-orange-500/10
                 "
               />
-
             </div>
-
           </div>
 
           {/* BUTTON */}
 
           <button
             type="submit"
-
             className="
               w-full
               h-14
@@ -257,7 +230,6 @@ export const FormularioRecuperacion = () => {
           >
             Enviar correo
           </button>
-
         </form>
 
         {/* FOOTER */}
@@ -270,12 +242,9 @@ export const FormularioRecuperacion = () => {
             text-sm
           "
         >
-
           ¿Recordaste tu contraseña?
-
           <Link
             to="/login"
-
             className="
               text-orange-400
               hover:text-orange-300
@@ -286,11 +255,8 @@ export const FormularioRecuperacion = () => {
           >
             Volver al login
           </Link>
-
         </div>
-
       </div>
-
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { FormularioRecuperacion } from "../components/FormularioRecuperacion";
+import { FormularioRecuperacion } from "../components/FormularioRecuperacion.jsx";
 
 export const RecuperacionPage = () => {
   return (
@@ -10,7 +10,6 @@ export const RecuperacionPage = () => {
         overflow-hidden
       "
     >
-
       {/* EFECTOS FONDO */}
 
       <div
@@ -44,7 +43,6 @@ export const RecuperacionPage = () => {
       <div className="relative z-10">
         <FormularioRecuperacion />
       </div>
-
     </main>
   );
 };

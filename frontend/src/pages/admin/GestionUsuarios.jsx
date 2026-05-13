@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { BotonLogout } from "../../components/BotonLogout.jsx";
 import {
   getPersonas,
@@ -9,58 +6,45 @@ import {
   getVendedores,
 } from "../../services/userService";
 
-import {
-  DynamicTable,
-} from "../../components/tables/DynamicTable";
+import { DynamicTable } from "../../components/tables/DynamicTable";
 
 export const GestionUsuarios = () => {
+  const [active, setActive] = useState("personas");
 
-  const [active,
-    setActive] =
-    useState("personas");
-
-  const [data,
-    setData] =
-    useState([]);
+  const [data, setData] = useState([]);
 
   const loadData = async () => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="))
+      ?.split("=")[1];
 
-    if (active === "personas") {
+    try {
+      if (active === "personas") {
+        const res = await getPersonas(token);
+        setData(res.data || []);
+      }
 
-      const res =
-        await getPersonas();
+      if (active === "usuarios") {
+        const res = await getUsuarios(token);
+        setData(res.data || []);
+      }
 
-      setData(res);
-
-    }
-
-    if (active === "usuarios") {
-
-      const res =
-        await getUsuarios();
-
-      setData(res);
-
-    }
-
-    if (active === "vendedores") {
-
-      const res =
-        await getVendedores();
-
-      setData(res);
-
+      if (active === "vendedores") {
+        const res = await getVendedores(token);
+        setData(res.data || []);
+      }
+    } catch (error) {
+      console.error("Error cargando datos:", error);
+      setData([]);
     }
   };
 
   useEffect(() => {
-
     loadData();
-
   }, [active]);
 
   const personaColumns = [
-
     {
       key: "cedula",
       label: "Cédula",
@@ -93,7 +77,6 @@ export const GestionUsuarios = () => {
   ];
 
   const usuarioColumns = [
-
     {
       key: "persona",
       label: "Persona",
@@ -111,8 +94,7 @@ export const GestionUsuarios = () => {
   ];
 
   const vendedorColumns = [
-
-   {
+    {
       key: "cedula",
       label: "Cédula",
     },
@@ -149,7 +131,6 @@ export const GestionUsuarios = () => {
   ];
 
   return (
-
     <div
       className="
         min-h-screen
@@ -160,14 +141,13 @@ export const GestionUsuarios = () => {
         text-white
       "
     >
-
       {/* EFECTOS FONDO */}
 
       <div
         className="
           absolute
-          w-[500px]
-          h-[500px]
+          w-125
+          h-125
           bg-orange-500/10
           blur-3xl
           rounded-full
@@ -179,8 +159,8 @@ export const GestionUsuarios = () => {
       <div
         className="
           absolute
-          w-[400px]
-          h-[400px]
+          w-100
+          h-100
           bg-purple-500/10
           blur-3xl
           rounded-full
@@ -192,7 +172,6 @@ export const GestionUsuarios = () => {
       {/* CONTENIDO */}
 
       <div className="relative z-10 space-y-8">
-
         {/* HEADER */}
 
         <section
@@ -205,9 +184,7 @@ export const GestionUsuarios = () => {
             gap-6
           "
         >
-
           <div>
-
             <h1
               className="
                 text-5xl
@@ -228,7 +205,6 @@ export const GestionUsuarios = () => {
             >
               Administra personas, usuarios y vendedores del sistema.
             </p>
-
           </div>
 
           <button
@@ -250,7 +226,6 @@ export const GestionUsuarios = () => {
           >
             Nuevo usuario
           </button>
-
         </section>
 
         {/* BOTONES */}
@@ -262,12 +237,8 @@ export const GestionUsuarios = () => {
             gap-4
           "
         >
-
           <button
-            onClick={() =>
-              setActive("personas")
-            }
-
+            onClick={() => setActive("personas")}
             className={`
               h-14
               px-7
@@ -280,19 +251,17 @@ export const GestionUsuarios = () => {
 
               ${
                 active === "personas"
-
-                ? `
+                  ? `
                   bg-orange-500
                   text-white
                   shadow-[0_10px_30px_rgba(249,115,22,.25)]
                 `
-
-                : `
+                  : `
                   bg-[#111111]
                   border
                   border-white/5
                   text-zinc-300
-                  hover:bg-white/[0.03]
+                  hover:bg-white/3
                 `
               }
             `}
@@ -301,10 +270,7 @@ export const GestionUsuarios = () => {
           </button>
 
           <button
-            onClick={() =>
-              setActive("usuarios")
-            }
-
+            onClick={() => setActive("usuarios")}
             className={`
               h-14
               px-7
@@ -317,19 +283,17 @@ export const GestionUsuarios = () => {
 
               ${
                 active === "usuarios"
-
-                ? `
+                  ? `
                   bg-orange-500
                   text-white
                   shadow-[0_10px_30px_rgba(249,115,22,.25)]
                 `
-
-                : `
+                  : `
                   bg-[#111111]
                   border
                   border-white/5
                   text-zinc-300
-                  hover:bg-white/[0.03]
+                  hover:bg-white/3
                 `
               }
             `}
@@ -338,10 +302,7 @@ export const GestionUsuarios = () => {
           </button>
 
           <button
-            onClick={() =>
-              setActive("vendedores")
-            }
-
+            onClick={() => setActive("vendedores")}
             className={`
               h-14
               px-7
@@ -354,26 +315,23 @@ export const GestionUsuarios = () => {
 
               ${
                 active === "vendedores"
-
-                ? `
+                  ? `
                   bg-orange-500
                   text-white
                   shadow-[0_10px_30px_rgba(249,115,22,.25)]
                 `
-
-                : `
+                  : `
                   bg-[#111111]
                   border
                   border-white/5
                   text-zinc-300
-                  hover:bg-white/[0.03]
+                  hover:bg-white/3
                 `
               }
             `}
           >
             Vendedores
           </button>
-
         </section>
 
         {/* TABLA */}
@@ -383,12 +341,11 @@ export const GestionUsuarios = () => {
             bg-[#111111]
             border
             border-white/5
-            rounded-[32px]
+            rounded-4xl
             p-8
             shadow-[0_0_40px_rgba(0,0,0,.35)]
           "
         >
-
           <div
             className="
               flex
@@ -400,9 +357,7 @@ export const GestionUsuarios = () => {
               mb-8
             "
           >
-
             <div>
-
               <h2
                 className="
                   text-3xl
@@ -410,31 +365,20 @@ export const GestionUsuarios = () => {
                   text-white
                 "
               >
-                {
-                  active === "personas"
+                {active === "personas"
                   ? "Listado de personas"
-
                   : active === "usuarios"
-                  ? "Listado de usuarios"
-
-                  : "Listado de vendedores"
-                }
+                    ? "Listado de usuarios"
+                    : "Listado de vendedores"}
               </h2>
 
               <p className="text-zinc-500 mt-2 text-sm">
-
-                {
-                  active === "personas"
+                {active === "personas"
                   ? "Consulta todas las personas registradas."
-
                   : active === "usuarios"
-                  ? "Administra los usuarios del sistema."
-
-                  : "Consulta los vendedores registrados."
-                }
-
+                    ? "Administra los usuarios del sistema."
+                    : "Consulta los vendedores registrados."}
               </p>
-
             </div>
 
             <button
@@ -455,7 +399,6 @@ export const GestionUsuarios = () => {
             >
               Exportar datos
             </button>
-
           </div>
 
           <div
@@ -464,40 +407,21 @@ export const GestionUsuarios = () => {
               rounded-2xl
             "
           >
-
             {active === "personas" && (
-
-              <DynamicTable
-                columns={personaColumns}
-                data={data}
-              />
-
+              <DynamicTable columns={personaColumns} data={data} />
             )}
 
             {active === "usuarios" && (
-
-              <DynamicTable
-                columns={usuarioColumns}
-                data={data}
-              />
-
+              <DynamicTable columns={usuarioColumns} data={data} />
             )}
 
             {active === "vendedores" && (
-
-              <DynamicTable
-                columns={vendedorColumns}
-                data={data}
-              />
-
+              <DynamicTable columns={vendedorColumns} data={data} />
             )}
-
           </div>
-
         </section>
-          <BotonLogout />
+        <BotonLogout />
       </div>
-          
     </div>
   );
 };

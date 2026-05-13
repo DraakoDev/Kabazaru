@@ -1,52 +1,43 @@
-export const DynamicTable = ({
-  columns,
-  data,
-}) => {
-
+export const DynamicTable = ({ columns, data }) => {
   const handleView = (item) => {
-
     console.log("Ver:", item);
-
   };
 
   const handleEdit = (item) => {
-
     console.log("Editar:", item);
-
   };
 
   const handleDelete = (item) => {
-
     console.log("Eliminar:", item);
-
   };
 
-  return (
+  const safeData = Array.isArray(data) ? data : [];
 
-    <div className="
+  return (
+    <div
+      className="
       overflow-x-auto
       rounded-3xl
-    ">
-
-      <table className="
+    "
+    >
+      <table
+        className="
         w-full
         border-collapse
-      ">
-
+      "
+      >
         {/* HEADER */}
 
         <thead>
-
-          <tr className="
+          <tr
+            className="
             bg-slate-100
             text-slate-700
-          ">
-
+          "
+          >
             {columns.map((col) => (
-
               <th
                 key={col.key}
-
                 className="
                   text-left
                   px-6
@@ -56,33 +47,29 @@ export const DynamicTable = ({
               >
                 {col.label}
               </th>
-
             ))}
 
             {/* NUEVA COLUMNA */}
 
-            <th className="
+            <th
+              className="
               text-left
               px-6
               py-4
               font-bold
-            ">
+            "
+            >
               Acciones
             </th>
-
           </tr>
-
         </thead>
 
         {/* BODY */}
 
         <tbody>
-
-          {data.map((item, index) => (
-
+          {safeData.map((item, index) => (
             <tr
               key={index}
-
               className="
                 border-b
                 border-slate-100
@@ -90,14 +77,11 @@ export const DynamicTable = ({
                 transition
               "
             >
-
               {/* DATOS */}
 
               {columns.map((col) => (
-
                 <td
                   key={col.key}
-
                   className="
                     px-6
                     py-4
@@ -106,28 +90,26 @@ export const DynamicTable = ({
                 >
                   {item[col.key]}
                 </td>
-
               ))}
 
               {/* BOTONES */}
 
-              <td className="
+              <td
+                className="
                 px-6
                 py-4
-              ">
-
-                <div className="
+              "
+              >
+                <div
+                  className="
                   flex
                   gap-3
-                ">
-
+                "
+                >
                   {/* VER */}
 
                   <button
-                    onClick={() =>
-                      handleView(item)
-                    }
-
+                    onClick={() => handleView(item)}
                     className="
                       px-4
                       py-2
@@ -146,10 +128,7 @@ export const DynamicTable = ({
                   {/* EDITAR */}
 
                   <button
-                    onClick={() =>
-                      handleEdit(item)
-                    }
-
+                    onClick={() => handleEdit(item)}
                     className="
                       px-4
                       py-2
@@ -168,10 +147,7 @@ export const DynamicTable = ({
                   {/* ELIMINAR */}
 
                   <button
-                    onClick={() =>
-                      handleDelete(item)
-                    }
-
+                    onClick={() => handleDelete(item)}
                     className="
                       px-4
                       py-2
@@ -186,19 +162,12 @@ export const DynamicTable = ({
                   >
                     Eliminar
                   </button>
-
                 </div>
-
               </td>
-
             </tr>
-
           ))}
-
         </tbody>
-
       </table>
-        
     </div>
   );
 };
