@@ -1,4 +1,4 @@
-import { cambiarContrasena, checkLogin, crearUsuario, getPersonInDB, getUserInDB } from '../model/usuario.model.js'
+import { cambiarContrasena, checkLogin, crearUsuario, eliminarUsuario, getPersonInDB, getUserInDB } from '../model/usuario.model.js'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { transporter } from '../services/mail/mailer.js'
@@ -246,4 +246,15 @@ Conduce hacia el futuro 🚘
   })
 
   res.send({ message: 'Correo de recuperacion enviado' })
+}
+
+export const borrarUsuario = (req, res) => {
+  const { username } = req.params
+  try {
+    const data = eliminarUsuario(username)
+    console.log(data)
+    res.send({ message: 'El usuario fue eliminado correctamente' })
+  } catch (error) {
+    res.send({ message: 'No se pudo eliminar el usuaior', error: error.message })
+  }
 }

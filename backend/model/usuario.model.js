@@ -1,6 +1,6 @@
 import { pool } from '../db/conexion.js'
 import { BUSCAR_PERSONA, INSERTAR_PERSONA } from '../db/queries/persona.queries.js'
-import { INSERTAR_USUARIO, REPASSWORD, SELECCIONAR_USUARIO } from '../db/queries/user.queries.js'
+import { ELIMINAR_USUARIO, INSERTAR_USUARIO, REPASSWORD, SELECCIONAR_USUARIO } from '../db/queries/user.queries.js'
 import bcrypt from 'bcrypt'
 
 export const getUserInDB = async (user) => {
@@ -99,5 +99,16 @@ export const crearUsuario = async (persona) => {
     throw new Error('El usuario no pudo ser creado!!!')
   } finally {
     if (conexion) conexion.release()
+  }
+}
+
+export const eliminarUsuario = async (username) => {
+  let conexion
+  try {
+    conexion = await pool.getConnection()
+    const data = await conexion.query(ELIMINAR_USUARIO, username)
+    return data
+  } catch (error) {
+    throw new Error('Error eliminando el usuario' + error.message)
   }
 }

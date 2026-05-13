@@ -1,3 +1,5 @@
 export const INSERTAR_USUARIO = 'INSERT INTO usuario VALUES (? ,?, ?, ?)'
 export const SELECCIONAR_USUARIO = 'SELECT * FROM usuario WHERE nombre_usuario = ?'
 export const REPASSWORD = 'UPDATE usuario SET contrasena = ? WHERE nombre_usuario = ?'
+export const ELIMINAR_USUARIO = 'DELETE FROM usuario WHERE nombre_usuario = ?'
+export const EDITAR_USUARIO = 'UPDATE usuario SET tipo = ? WHERE '
