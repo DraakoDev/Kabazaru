@@ -1,10 +1,15 @@
 import { pool } from '../db/conexion.js'
 import { BUSCAR_PERSONA, INSERTAR_PERSONA } from '../db/queries/persona.queries.js'
-import { INSERTAR_USUARIO, SELECCIONAR_USUARIO } from '../db/queries/user.queries.js'
+import { INSERTAR_USUARIO, REPASSWORD, SELECCIONAR_USUARIO } from '../db/queries/user.queries.js'
 import bcrypt from 'bcrypt'
 
 export const getUserInDB = async (user) => {
   const data = await pool.query(SELECCIONAR_USUARIO, user)
+  return data[0]
+}
+
+export const getPersonInDB = async (cedula) => {
+  const data = await pool.query(BUSCAR_PERSONA, cedula)
   return data[0]
 }
 
@@ -35,6 +40,21 @@ export const crearPersona = async (conexion, persona) => {
 
 export const buscarPersona = async (conexion, cedula) => {
   return await conexion.query(BUSCAR_PERSONA, cedula)
+}
+
+export const cambiarContrasena = async (username, contrasena) => {
+  let conexion
+  try {
+    console.log('Cambio model')
+    console.log(username)
+    console.log(contrasena)
+    conexion = await pool.getConnection()
+    const newHashedPassword = await bcrypt.hash(contrasena, 8)
+    const data = await conexion.query(REPASSWORD, [newHashedPassword, username])
+    return data.affectedRows
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const crearUsuario = async (persona) => {
